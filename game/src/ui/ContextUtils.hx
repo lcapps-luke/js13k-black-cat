@@ -38,6 +38,6 @@ class ContextUtils {
 	}
 
 	public static function circle(ctx:CanvasRenderingContext2D, x:Float, y:Float, r:Float, yr:Null<Float> = null){
-		Main.context.ellipse(x, y, r, yr == null ? r : yr, 0, 0, Math.PI * 2);
+		ctx.ellipse(x, y, r, yr == null ? r : yr, 0, 0, Math.PI * 2);
 	}
 }

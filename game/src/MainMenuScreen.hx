@@ -1,5 +1,6 @@
 package;
 
+import maze.Room;
 using ui.ContextUtils;
 
 class MainMenuScreen extends AbstractScreen{
@@ -14,5 +15,7 @@ class MainMenuScreen extends AbstractScreen{
 		Main.context.fillStyle = "#FFF";
 		Main.context.font = "100px sans-serif";
 		Main.context.centeredText(Main.TITLE, 0, Main.WIDTH, Main.HEIGHT * 0.25);
+
+		Main.currentScreen = new Room();
 	}
 }

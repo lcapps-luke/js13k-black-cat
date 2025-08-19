@@ -1,5 +1,7 @@
 package;
 
+import ui.Pointer;
+import js.html.svg.Point;
 import js.Browser;
 import js.html.CanvasRenderingContext2D;
 import js.html.CanvasElement;
@@ -30,6 +32,7 @@ class Main{
 
 		currentScreen = new MainMenuScreen();
 
+		Pointer.init();
 		Browser.window.requestAnimationFrame(update);
 	}
 
@@ -38,6 +41,7 @@ class Main{
 
 		currentScreen?.update(d / 1000);
 
+		Pointer.update();
 		lastFrame = s;
 		Browser.window.requestAnimationFrame(update);
 	}
