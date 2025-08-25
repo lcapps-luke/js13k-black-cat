@@ -30,11 +30,55 @@
 			#c{
 				image-rendering: pixelated;
 			}
+			.osc{
+				position: fixed;
+				color: white;
+				display: none;;
+			}
+			.osc div{
+				width: calc(100% / 3);
+				height: calc(100% / 3);
+				position: absolute;
+				background-color: #00F;
+			}
+
+			#osc-up{
+				top: 0px;
+				left: calc(100% / 3);
+			}
+			#osc-left{
+				top: calc(100% / 3);
+				left: 0px;
+			}
+			#osc-right{
+				top: calc(100% / 3);
+				right: 0px;
+			}
+			#osc-down{
+				bottom: 0px;
+				left: calc(100% / 3);
+			}
+			#osc-act{
+				top: calc(100% / 3);
+				left: calc(100% / 3);
+			}
 		</style>
 		<title>Black Cat</title>
 	</head>
 	<body>
 		<canvas id="c" width="255" height="255"></canvas>
+		
+
+		<div class="osc left">
+			<div id="osc-up">Up</div>
+			<div id="osc-left">Left</div>
+			<div id="osc-right">Right</div>
+			<div id="osc-down">Down</div>
+		</div>
+		<div class="osc right">
+			<div id="osc-act">Action</div>
+		</div>
+
 		<script>::zzfx::</script>
 		<script>::src::</script>
 	</body>

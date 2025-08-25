@@ -1,5 +1,6 @@
 package;
 
+import js.html.DivElement;
 import js.Browser;
 import js.html.CanvasElement;
 import js.html.Gamepad;
@@ -22,12 +23,6 @@ class Ctrl {
 
 	private static var keys:Map<String, Bool>;
 	private static var c:CanvasElement;
-
-	public static var mx(default, null):Float = 0;
-	public static var my(default, null):Float = 0;
-	private static var mTouch:Int = -1;
-	@:native("jr")
-	public static var justReleased(default, null):Bool = false;
 
 	@:native("l")
 	public static var left(default, null):Bool = false;
@@ -60,12 +55,18 @@ class Ctrl {
 		w.onkeydown = onKeyDown;
 		w.onkeyup = onKeyUp;
 
-		c.onmousemove = onMouseMove;
-		w.onmouseup = onMouseUp;
-		w.ontouchstart = onTouchStart;
-		w.ontouchmove = onTouchMove;
-		w.ontouchend = onTouchEnd;
-		w.ontouchcancel = onTouchEnd;
+		w.addEventListener("touchstart", onTouchStart, {
+			passive: false
+		});
+		w.addEventListener("touchmove", onTouchMove, {
+			passive: false
+		});
+		w.addEventListener("touchend", onTouchEnd, {
+			passive: false
+		});
+		w.addEventListener("touchcancel", onTouchEnd, {
+			passive: false
+		});
 
 		if (Browser.navigator.getGamepads != null) {
 			var ng = Browser.navigator.getGamepads();
@@ -82,29 +83,29 @@ class Ctrl {
 
 		onScreenButtons = [
 			{
-				z: new AABB(BUTTON_GAP, Main.HEIGHT - BUTTON_SIZE * 2 - BUTTON_GAP, BUTTON_SIZE, BUTTON_SIZE),
 				n: "Left",
-				p: 0
+				p: 0,
+				e: cast Browser.document.querySelector("#osc-left")
 			},
 			{
-				z: new AABB(BUTTON_SIZE * 2 + BUTTON_GAP, Main.HEIGHT - BUTTON_SIZE * 2 - BUTTON_GAP, BUTTON_SIZE, BUTTON_SIZE),
 				n: "Right",
-				p: 0
+				p: 0,
+				e: cast Browser.document.querySelector("#osc-right")
 			},
 			{
-				z: new AABB(BUTTON_SIZE + BUTTON_GAP, Main.HEIGHT - BUTTON_SIZE * 3 - BUTTON_GAP, BUTTON_SIZE, BUTTON_SIZE),
 				n: "UP",
-				p: 0
+				p: 0,
+				e: cast Browser.document.querySelector("#osc-up")
 			},
 			{
-				z: new AABB(BUTTON_SIZE + BUTTON_GAP, Main.HEIGHT - BUTTON_SIZE - BUTTON_GAP, BUTTON_SIZE, BUTTON_SIZE),
 				n: "DOWN",
-				p: 0
+				p: 0,
+				e: cast Browser.document.querySelector("#osc-down")
 			},
 			{
-				z: new AABB(Main.WIDTH - BUTTON_SIZE * 2 - BUTTON_GAP, Main.HEIGHT - BUTTON_SIZE * 2 - BUTTON_GAP, BUTTON_SIZE, BUTTON_SIZE),
 				n: "ACTION",
-				p: 0
+				p: 0,
+				e: cast Browser.document.querySelector("#osc-act")
 			}
 		];
 	}
@@ -119,72 +120,41 @@ class Ctrl {
 		keys.set(e.code, false);
 	}
 
-	@:native("omm")
-	private static function onMouseMove(e:MouseEvent) {
-		mx = (e.offsetX / c.clientWidth) * c.width;
-		my = (e.offsetY / c.clientHeight) * c.height;
-	}
-
-	@:native("omu")
-	private static function onMouseUp(e:MouseEvent) {
-		justReleased = true;
-	}
 
 	@:native("ots")
 	private static function onTouchStart(e:TouchEvent) {
 		e.preventDefault();
+		e.stopImmediatePropagation();
 
 		for (t in e.changedTouches) {
-			var x = tpx(t);
-			var y = tpy(t);
-
-			if (mTouch < 0) {
-				mTouch = t.identifier;
-				mx = x;
-				my = y;
-			}
-
-			touchList[t.identifier] = new Vec2(x, y);
+			touchList[t.identifier] = new Vec2(t.clientX, t.clientY);
 		}
 
-		usingTouchscreen = true;
+		if(!usingTouchscreen){
+			usingTouchscreen = true;
+			for(e in Browser.document.querySelectorAll(".osc")){
+				var ele:DivElement = cast e;
+				ele.style.display = "block";
+			}
+		}
 	}
 
 	@:native("otm")
 	private static function onTouchMove(e:TouchEvent) {
 		e.preventDefault();
+		e.stopImmediatePropagation();
 
 		for (t in e.changedTouches) {
-			var x = tpx(t);
-			var y = tpy(t);
-
-			if (mTouch == t.identifier) {
-				mx = x;
-				my = y;
-			}
-
-			touchList[t.identifier].set(tpx(t), tpy(t));
+			touchList[t.identifier].set(t.clientX, t.clientY);
 		}
-	}
-
-	private static function tpx(t:Touch):Float {
-		return ((t.clientX - c.offsetLeft) / c.clientWidth) * c.width;
-	}
-
-	private static function tpy(t:Touch):Float {
-		return ((t.clientY - c.offsetTop) / c.clientHeight) * c.height;
 	}
 
 	@:native("ote")
 	private static function onTouchEnd(e:TouchEvent) {
 		e.preventDefault();
+		e.stopImmediatePropagation();
 
 		for (t in e.changedTouches) {
-			if (t.identifier == mTouch) {
-				justReleased = true;
-				mTouch = -1;
-			}
-
 			touchList.remove(t.identifier);
 		}
 	}
@@ -230,40 +200,21 @@ class Ctrl {
 	@:native("cosb")
 	private static function checkOnScreenButton(id:Int):Bool {
 		var b = onScreenButtons[id];
+		var r = b.e.getBoundingClientRect();
+		var aabb = new AABB(r.left, r.top, r.width, r.height);
 
 		for (i in touchList.iterator()) {
-			if (b.z.contains(i.x, i.y)) {
+			if (aabb.contains(i.x, i.y)) {
 				return true;
 			}
 		}
 
 		return false;
 	}
-
-	@:native("re")
-	public static function reset() {
-		justReleased = false;
-	}
-
-	@:native("drw")
-	public static function draw() {
-		if (usingTouchscreen) {
-			Main.context.font = "bold 35px Verdana, sans-serif";
-
-			for (b in onScreenButtons) {
-				Main.context.fillStyle = "#00F8";
-				Main.context.fillRect(b.z.x, b.z.y, b.z.w, b.z.h);
-
-				Main.context.fillStyle = "#FFF8";
-				var w = Main.context.measureText(b.n).width;
-				Main.context.fillText(b.n, b.z.centerX() - w / 2, b.z.centerY() + 35 * 0.25);
-			}
-		}
-	}
 }
 
 typedef OnScreenButton = {
-	var z:AABB;
 	var n:String;
 	var p:Int;
+	var e:DivElement;
 }

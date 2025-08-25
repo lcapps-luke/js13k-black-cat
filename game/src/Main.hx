@@ -1,12 +1,13 @@
 package;
 
+import js.html.DivElement;
 import js.Browser;
 import js.html.CanvasRenderingContext2D;
 import js.html.CanvasElement;
 
 class Main{
-	public static inline var WIDTH = 255;//544;
-	public static inline var HEIGHT = 255;//544;
+	public static inline var WIDTH = 255;
+	public static inline var HEIGHT = 255;
 	public static var TITLE = "Black Cat";
 
 	@:native("ca")
@@ -21,9 +22,15 @@ class Main{
 	@:native("l")
 	public static var lastFrame:Float = 0;
 
+	private static var oscL:DivElement;
+	private static var oscR:DivElement;
+
 	public static function main(){
 		canvas = cast Browser.document.getElementById("c");
 		context = canvas.getContext2d();
+
+		oscL = cast Browser.document.querySelector(".osc.left");
+		oscR = cast Browser.document.querySelector(".osc.right");
 
 		Browser.window.onresize = onResize;
 		onResize();
@@ -42,9 +49,6 @@ class Main{
 
 		currentScreen?.update(d / 1000);
 
-		Ctrl.reset();
-		Ctrl.draw();
-		
 		lastFrame = s;
 		Browser.window.requestAnimationFrame(update);
 	}
@@ -53,7 +57,37 @@ class Main{
 		var w = Browser.window.innerWidth;
 		var h = Browser.window.innerHeight;
 
-		canvas.style.top = '${(h - canvas.clientHeight) / 2}px';
-		canvas.style.left = '${(w - canvas.clientWidth) / 2}px';
+		var cl = (w - canvas.clientWidth) / 2;
+		canvas.style.top = '0px';
+		canvas.style.left = '${cl}px';
+
+		if(h > w){
+			var ctrlHeight = h - canvas.clientHeight;
+			var btm = Math.max(0, ctrlHeight / 2 - w / 4);
+
+			oscL.style.width = '${w / 2}px';
+			oscL.style.height = '${w / 2}px';
+			oscL.style.bottom = '${btm}px';
+			oscL.style.top = null;
+			oscL.style.left = '0px';
+
+			oscR.style.width = '${w / 2}px';
+			oscR.style.height = '${w / 2}px';
+			oscR.style.bottom = '${btm}px';
+			oscR.style.top = null;
+			oscR.style.right = '0px';
+		}else{
+			var sz = Math.min(h, cl);
+
+			oscL.style.width = '${sz}px';
+			oscL.style.height = '${sz}px';
+			oscL.style.top = '${h / 2 - sz / 2}px';
+			oscL.style.left = '0px';
+
+			oscR.style.width = '${sz}px';
+			oscR.style.height = '${sz}px';
+			oscR.style.top = '${h / 2 - sz / 2}px';
+			oscR.style.right = '0px';
+		}
 	}
 }
