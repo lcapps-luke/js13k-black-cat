@@ -11,8 +11,7 @@ class Player extends AbstractEntity {
 		super(room);
 		aabb.w = 32;
 		aabb.h = 32;
-		offsetX = 16;
-		offsetY = 16;
+		offset.set(16, 16);
 	}
 
 	public function update(s:Float) {

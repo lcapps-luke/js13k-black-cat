@@ -18,8 +18,7 @@ class Light extends AbstractEntity{
 		super(room);
 		aabb.w = radius * 2;
 		aabb.h = radius * 2;
-		offsetX = radius;
-		offsetY = radius;
+		offset.set(radius, radius);
 
 		this.colour = colour;
 
@@ -28,9 +27,10 @@ class Light extends AbstractEntity{
 
 	public function update(s:Float) {
 		if(lastX == null || lastY == null || lastX != x || lastY != y){
-			grad = shadowCtx.createRadialGradient(x, y, 0, x, y, offsetX);
+			grad = shadowCtx.createRadialGradient(x, y, 0, x, y, offset.x);
 			grad.addColorStop(0, colour);
-			grad.addColorStop(1, '${colour}0');
+			grad.addColorStop(1, colour.substr(0, 7) + "00");
+			
 		}
 		dirty = true;
 	}
@@ -49,7 +49,7 @@ class Light extends AbstractEntity{
 		shadowCtx.globalCompositeOperation = "destination-out";
 		shadowCtx.fillStyle = "#000";
 		room.walls.forEachIn(aabb, w->{
-			w.drawShadow(shadowCtx, x, y, offsetX);
+			w.drawShadow(shadowCtx, x, y, offset.x);
 		});
 
 		dirty = false;

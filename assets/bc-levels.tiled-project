@@ -1,0 +1,60 @@
+{
+    "automappingRulesFile": "",
+    "commands": [
+    ],
+    "compatibilityVersion": 1100,
+    "extensionsPath": "extensions",
+    "folders": [
+        "."
+    ],
+    "propertyTypes": [
+        {
+            "id": 3,
+            "name": "Direction",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "UP",
+                "DOWN",
+                "LEFT",
+                "RIGHT"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ffffff00",
+            "drawFill": false,
+            "id": 2,
+            "members": [
+                {
+                    "name": "colour",
+                    "type": "color",
+                    "value": ""
+                },
+                {
+                    "name": "direction",
+                    "propertyType": "Direction",
+                    "type": "string",
+                    "value": "UP"
+                }
+            ],
+            "name": "Light",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ff0000ff",
+            "drawFill": true,
+            "id": 5,
+            "members": [
+            ],
+            "name": "Player",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        }
+    ]
+}

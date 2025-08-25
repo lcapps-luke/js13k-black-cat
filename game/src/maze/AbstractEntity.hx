@@ -1,5 +1,6 @@
 package maze;
 
+import math.Vec2;
 import js.html.CanvasRenderingContext2D;
 import math.AABB;
 
@@ -10,8 +11,7 @@ abstract class AbstractEntity {
 	public var x(default, set):Float = 0;
 	public var y(default, set):Float = 0;
 
-	private var offsetX(default, set):Float = 0;
-	private var offsetY(default, set):Float = 0;
+	private var offset(default, null):Vec2 = new Vec2();
 
 	public function new(room:Room){
 		this.room = room;
@@ -21,22 +21,12 @@ abstract class AbstractEntity {
 	abstract public function draw(c:CanvasRenderingContext2D):Void;
 
 	function set_x(value:Float):Float {
-		aabb.x = value - offsetX;
+		aabb.x = value - offset.x;
 		return x = value;
 	}
 
 	function set_y(value:Float):Float {
-		aabb.y = value - offsetY;
+		aabb.y = value - offset.y;
 		return y = value;
-	}
-
-	function set_offsetX(value:Float):Float {
-		aabb.x = x - value;
-		return offsetX = value;
-	}
-
-	function set_offsetY(value:Float):Float {
-		aabb.y = y - value;
-		return offsetY = value;
 	}
 }

@@ -1,5 +1,6 @@
 package maze;
 
+import resource.ResourceBuilder;
 import js.html.CanvasRenderingContext2D;
 import js.Browser;
 import js.html.CanvasElement;
@@ -10,32 +11,53 @@ class Room extends AbstractScreen{
 	public var walls(default, null):Bsp<Wall>;
 	public var camera(default, null):AABB;
 
-	public var lighta:Light;
-	public var lightb:Light;
+	private var lights:Bsp<Light>;
 	public var shadowCanvas:CanvasRenderingContext2D;
 
 	public var player:Player;
 
+	private var lvl = ResourceBuilder.buildMap("assets/level/01.tmj");
+
 	public function new(){
 		super();
 		backgroundStyle = "#888";
-		walls = new Bsp<Wall>(Main.WIDTH, Main.HEIGHT, 2);
+		walls = new Bsp<Wall>(Main.WIDTH, Main.HEIGHT, 10);
+
+		var nx = 0;
+		var ny = 0;
+		for(c in lvl.walls.split("")){
+			if(c == "w"){
+				var w = new Wall(this);
+				w.x = nx * 32;
+				w.y = ny * 32;
+				walls.add(w, w.aabb);
+			}
+
+			nx++;
+			if(nx >= lvl.w){
+				nx = 0;
+				ny++;
+			}
+		}
+
 		
-		var w = new Wall(this);
-		w.x = 900;
-		w.y = 720;
-		walls.add(w, w.aabb);
 
 		player = new Player(this);
-		player.x = 128;
-		player.y = 128;
+		player.x = lvl.px;
+		player.y = lvl.py;
 
-		lighta = new Light(this, 402, "#0F0");
-		lighta.x = 725;
-		lighta.y = 628;
-		lightb = new Light(this, 402, "#00F");
-		lightb.x = 1106;
-		lightb.y = 628;
+		lights = new Bsp<Light>(Main.WIDTH, Main.HEIGHT, 10);
+		var lightQty:Int = Math.floor(lvl.lights.length / 4);
+		for(i in 0...lightQty){
+			var x:Int = lvl.lights[i * 4];
+			var y:Int = lvl.lights[i * 4 + 1];
+			var radius:Int = lvl.lights[i * 4 + 2];
+			var color:String = lvl.lights[i * 4 + 3];
+			var light = new Light(this, radius, color);
+			light.x = x;
+			light.y = y;
+			lights.add(light, light.aabb);
+		}
 
 		camera = new AABB(0, 0, Main.WIDTH, Main.HEIGHT);
 
@@ -53,25 +75,19 @@ class Room extends AbstractScreen{
 		player.update(s);
 		player.draw(Main.context);
 
-		lightb.x = player.x;
-		lightb.y = player.y;
-
-		lighta.update(s);
-		lightb.update(s);
-
-		
-
 		shadowCanvas.globalCompositeOperation = "source-over";
 		shadowCanvas.fillStyle = "#000";
 		shadowCanvas.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
 		shadowCanvas.globalCompositeOperation = "destination-out";
-		lighta.draw(shadowCanvas);
-		lightb.draw(shadowCanvas);
-
 		Main.context.globalAlpha = 0.5;
 		Main.context.globalCompositeOperation = "lighter";
-		lighta.drawGlow(Main.context);
-		lightb.drawGlow(Main.context);
+
+		lights.forEachIn(camera, l->{
+			l.update(s);
+			l.draw(shadowCanvas);
+			l.drawGlow(Main.context);
+		});
+
 		Main.context.globalCompositeOperation = "source-over";
 
 		Main.context.globalAlpha = 0.8;
