@@ -17,25 +17,24 @@
 				overscroll-behavior: none;
 			}
 
-			@media (min-aspect-ratio: 9/16) {
+			@media (min-aspect-ratio: 1) {
 				#c{
-					max-height: 100%;
+					height: 100%;
 				}
 			}
-			@media (max-aspect-ratio: 9/16) {
+			@media (max-aspect-ratio: 1) {
 				#c{
-					max-width: 100%;
+					width: 100%;
 				}
 			}
-			input{
-				position: absolute;
-				box-sizing: border-box;
+			#c{
+				image-rendering: pixelated;
 			}
 		</style>
 		<title>Black Cat</title>
 	</head>
 	<body>
-		<canvas id="c" width="1920" height="1080"></canvas>
+		<canvas id="c" width="255" height="255"></canvas>
 		<script>::zzfx::</script>
 		<script>::src::</script>
 	</body>

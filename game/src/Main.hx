@@ -5,8 +5,8 @@ import js.html.CanvasRenderingContext2D;
 import js.html.CanvasElement;
 
 class Main{
-	public static inline var WIDTH = 1920;
-	public static inline var HEIGHT = 1080;
+	public static inline var WIDTH = 255;//544;
+	public static inline var HEIGHT = 255;//544;
 	public static var TITLE = "Black Cat";
 
 	@:native("ca")

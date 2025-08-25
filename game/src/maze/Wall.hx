@@ -3,11 +3,10 @@ package maze;
 import js.html.CanvasRenderingContext2D;
 
 class Wall extends AbstractEntity{
-
 	public function new(room:Room){
 		super(room);
-		aabb.w = 32;
-		aabb.h = 32;
+		aabb.w = Room.CELL_SIZE;
+		aabb.h = Room.CELL_SIZE;
 	}
 	
 	public function update(s:Float) {
@@ -16,7 +15,7 @@ class Wall extends AbstractEntity{
 
 	public function draw(c:CanvasRenderingContext2D) {
 		c.fillStyle = "#000";
-		c.fillRect(x, y, 32, 32);
+		c.fillRect(x, y, Room.CELL_SIZE, Room.CELL_SIZE);
 	}
 
 	public function drawShadow(c:CanvasRenderingContext2D, lx:Float, ly:Float, d:Float) {
@@ -35,9 +34,9 @@ class Wall extends AbstractEntity{
 	}
 
 	private function eachLine(callback:Float->Float->Float->Float->Void){
-		callback(aabb.x, aabb.y, aabb.x + aabb.w, aabb.y); //top
-		callback(aabb.x + aabb.w, aabb.y, aabb.x + aabb.w, aabb.y + aabb.h); // right
-		callback(aabb.x + aabb.w, aabb.y + aabb.h, aabb.x, aabb.y + aabb.h); // bottom
-		callback(aabb.x, aabb.y + aabb.h, aabb.x, aabb.y); // left
+		callback(aabb.x-1, aabb.y-1, aabb.x + aabb.w+1, aabb.y-1); //top
+		callback(aabb.x + aabb.w+1, aabb.y-1, aabb.x + aabb.w+1, aabb.y + aabb.h+1); // right
+		callback(aabb.x + aabb.w+1, aabb.y + aabb.h+1, aabb.x-1, aabb.y + aabb.h+1); // bottom
+		callback(aabb.x-1, aabb.y + aabb.h+1, aabb.x-1, aabb.y-1); // left
 	}
 }

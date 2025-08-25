@@ -9,6 +9,8 @@ package resource;
 #end
 
 class ResourceBuilder {
+	private static inline var SCALE = 0.5;
+
 	public static macro function buildMap(mapFilePath:String){
 
 		var mapData:TiledMap = Json.parse(File.getContent(mapFilePath));
@@ -50,7 +52,7 @@ class ResourceBuilder {
 			return switch(id){
 				case 0: "f";
 				case 1: "w";
-				default: "?";
+				default: "z";
 			}
 		}).join("");
 	}
@@ -67,14 +69,16 @@ class ResourceBuilder {
 		for(o in l.objects){
 			switch(o.type){
 				case "Player":
-					obj.playerX = Math.round(o.x + o.width / 2);
-					obj.playerY = Math.round(o.y + o.height / 2);
+					obj.playerX = Math.round((o.x + o.width / 2) * SCALE);
+					obj.playerY = Math.round((o.y + o.height / 2) * SCALE);
 				case "Light":
 					lightQty++;
 
-					var x = Math.round(o.x + o.width / 2);
-					var y = Math.round(o.y + o.height / 2);
-					var r = Math.round(o.width / 2);
+					var offset = getDirectionPropOffset(o.properties);
+
+					var x = Math.round((o.x + o.width / 2) * SCALE) + offset[0];
+					var y = Math.round((o.y + o.height / 2) * SCALE) + offset[1];
+					var r = Math.round(o.width / 2 * SCALE);
 					var c = getColourProp(o.properties);
 
 					obj.lights.push(x); // x,y,r,c
@@ -94,6 +98,21 @@ class ResourceBuilder {
 			}
 		}
 		throw "No colour property found";
+	}
+
+	private static function getDirectionPropOffset(props:Array<TiledProperty>):Array<Int>{
+		for(p in props){
+			if(p.name == "direction"){
+				return switch(p.value){
+					case "UP": [0, -4];
+					case "DOWN": [0, 4];
+					case "LEFT": [-4, 0];
+					case "RIGHT": [4, 0];
+					default: throw 'Unknown direction value: ${p.value}';
+				}
+			}
+		}
+		throw "No direction property found";
 	}
 
 	private static function argbTorgba(argb:String):String{

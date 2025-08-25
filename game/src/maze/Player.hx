@@ -9,9 +9,9 @@ class Player extends AbstractEntity {
 
 	public function new(room:Room) {
 		super(room);
-		aabb.w = 32;
-		aabb.h = 32;
-		offset.set(16, 16);
+		aabb.w = Room.CELL_SIZE;
+		aabb.h = Room.CELL_SIZE;
+		offset.set(Room.CELL_SIZE / 2, Room.CELL_SIZE / 2);
 	}
 
 	public function update(s:Float) {
@@ -28,7 +28,7 @@ class Player extends AbstractEntity {
 	public function draw(c:CanvasRenderingContext2D) {
 		c.beginPath();
 		c.fillStyle = "blue";
-		c.circle(x, y, 16);
+		c.circle(x, y, offset.x);
 		c.fill();
 	}
 

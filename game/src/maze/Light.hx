@@ -5,7 +5,7 @@ import js.html.CanvasRenderingContext2D;
 using ui.ContextUtils;
 
 class Light extends AbstractEntity{
-	private var shadowCtx:CanvasRenderingContext2D;
+	private static var shadowCtx:CanvasRenderingContext2D = Room.newCanvas();
 	private var grad:CanvasGradient;
 
 	private var lastX:Float = null;
@@ -21,8 +21,6 @@ class Light extends AbstractEntity{
 		offset.set(radius, radius);
 
 		this.colour = colour;
-
-		shadowCtx = Room.newCanvas();
 	}
 
 	public function update(s:Float) {
@@ -30,7 +28,6 @@ class Light extends AbstractEntity{
 			grad = shadowCtx.createRadialGradient(x, y, 0, x, y, offset.x);
 			grad.addColorStop(0, colour);
 			grad.addColorStop(1, colour.substr(0, 7) + "00");
-			
 		}
 		dirty = true;
 	}
@@ -41,6 +38,9 @@ class Light extends AbstractEntity{
 		}
 
 		shadowCtx.clearRect(0, 0, shadowCtx.canvas.width, shadowCtx.canvas.height);
+
+		shadowCtx.save();
+		shadowCtx.translate(-room.camera.x, -room.camera.y);
 
 		shadowCtx.globalCompositeOperation = "source-over";
 		shadowCtx.fillStyle = grad;
@@ -53,6 +53,8 @@ class Light extends AbstractEntity{
 		});
 
 		dirty = false;
+
+		shadowCtx.restore();
 	}
 
 	public function draw(c:CanvasRenderingContext2D) {
