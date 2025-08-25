@@ -1,7 +1,5 @@
 package maze;
 
-import ui.Pointer;
-import js.html.svg.Point;
 import js.html.CanvasRenderingContext2D;
 import js.Browser;
 import js.html.CanvasElement;
@@ -16,6 +14,8 @@ class Room extends AbstractScreen{
 	public var lightb:Light;
 	public var shadowCanvas:CanvasRenderingContext2D;
 
+	public var player:Player;
+
 	public function new(){
 		super();
 		backgroundStyle = "#888";
@@ -25,6 +25,10 @@ class Room extends AbstractScreen{
 		w.x = 900;
 		w.y = 720;
 		walls.add(w, w.aabb);
+
+		player = new Player(this);
+		player.x = 128;
+		player.y = 128;
 
 		lighta = new Light(this, 402, "#0F0");
 		lighta.x = 725;
@@ -46,8 +50,11 @@ class Room extends AbstractScreen{
 			w.draw(Main.context);
 		});
 
-		lightb.x = Pointer.X;
-		lightb.y = Pointer.Y;
+		player.update(s);
+		player.draw(Main.context);
+
+		lightb.x = player.x;
+		lightb.y = player.y;
 
 		lighta.update(s);
 		lightb.update(s);

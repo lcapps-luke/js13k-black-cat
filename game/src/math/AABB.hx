@@ -21,4 +21,20 @@ class AABB{
 			y > o.y + o.h
 		);
 	}
+
+	public function centerX() {
+		return x + w / 2;
+	}
+	public function centerY() {
+		return y + h / 2;
+	}
+
+	public function contains(ox, oy) {
+		return !(
+			ox < x ||
+			ox > x + w ||
+			oy < y ||
+			oy > y + h
+		);
+	}
 }

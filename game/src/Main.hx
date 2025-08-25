@@ -1,7 +1,5 @@
 package;
 
-import ui.Pointer;
-import js.html.svg.Point;
 import js.Browser;
 import js.html.CanvasRenderingContext2D;
 import js.html.CanvasElement;
@@ -30,18 +28,23 @@ class Main{
 		Browser.window.onresize = onResize;
 		onResize();
 
+		Ctrl.init(Browser.window, canvas);
+
 		currentScreen = new MainMenuScreen();
 
-		Pointer.init();
 		Browser.window.requestAnimationFrame(update);
 	}
 
 	private static function update(s:Float){
 		var d = s - lastFrame;
 
+		Ctrl.update();
+
 		currentScreen?.update(d / 1000);
 
-		Pointer.update();
+		Ctrl.reset();
+		Ctrl.draw();
+		
 		lastFrame = s;
 		Browser.window.requestAnimationFrame(update);
 	}
