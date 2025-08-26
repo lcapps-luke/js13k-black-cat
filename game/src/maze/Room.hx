@@ -9,9 +9,13 @@ import js.html.CanvasElement;
 import math.AABB;
 import bsp.Bsp;
 
+using ui.ContextUtils;
+
 class Room extends AbstractScreen{
 	public static inline var CELL_SIZE = 16;
 	public static inline var FLICKER_TIME = 3;
+	public static inline var LUCK_BAR_WIDTH = Main.WIDTH * 0.5;
+	public static inline var LUCK_BAR_HEIGHT = LUCK_BAR_WIDTH * 0.1;
 
 	public var walls(default, null):Bsp<Wall>;
 	public var camera(default, null):AABB;
@@ -25,6 +29,8 @@ class Room extends AbstractScreen{
 	public var playerLightFlickerTimer = FLICKER_TIME;
 
 	private var lvl = ResourceBuilder.buildMap("assets/level/01.tmj");
+
+	public var luck:Float = 100;
 
 	public function new(){
 		super();
@@ -120,6 +126,17 @@ class Room extends AbstractScreen{
 		Main.context.globalAlpha = 0.8;
 		Main.context.drawImage(shadowCanvas.canvas, 0, 0);
 		Main.context.globalAlpha = 1;
+
+		//draw luck
+		luck = Math.max(0, luck);
+		Main.context.fillStyle = "#444";
+		Main.context.fillRect(Main.WIDTH / 2 - LUCK_BAR_WIDTH / 2, 10, LUCK_BAR_WIDTH, LUCK_BAR_HEIGHT);
+		Main.context.fillStyle = "#208";
+		Main.context.fillRect(Main.WIDTH / 2 - LUCK_BAR_WIDTH / 2, 10, LUCK_BAR_WIDTH * luck / 100, LUCK_BAR_HEIGHT);
+		Main.context.fillStyle = "#fff";
+		Main.context.font = "bold 10px sans-serif";
+		(cast Main.context).letterSpacing = "3px";
+		Main.context.centeredText("Luck", Main.WIDTH / 2 - LUCK_BAR_WIDTH / 2, LUCK_BAR_WIDTH, 10 + LUCK_BAR_HEIGHT * 0.8, true);
 	}
 
 	public static function newCanvas():CanvasRenderingContext2D{
