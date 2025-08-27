@@ -1,5 +1,7 @@
 package maze;
 
+import maze.obstacle.CrackObstacle;
+import maze.obstacle.AbstractObstacle;
 import math.Vec2;
 import math.Random;
 import resource.ResourceBuilder;
@@ -17,6 +19,9 @@ class Room extends AbstractScreen{
 	public static inline var LUCK_BAR_WIDTH = Main.WIDTH * 0.5;
 	public static inline var LUCK_BAR_HEIGHT = LUCK_BAR_WIDTH * 0.1;
 
+	private var mapWidth:Int;
+	private var mapHeight:Int;
+
 	public var walls(default, null):Bsp<Wall>;
 	public var camera(default, null):AABB;
 
@@ -28,14 +33,16 @@ class Room extends AbstractScreen{
 	public var playerLightOffset = new Vec2();
 	public var playerLightFlickerTimer = FLICKER_TIME;
 
+	private var obstacles:Bsp<AbstractObstacle>;
+
 	private var lvl = ResourceBuilder.buildMap("assets/level/01.tmj");
 
 	public var luck:Float = 100;
 
 	public function new(){
 		super();
-		var mapWidth = lvl.w * CELL_SIZE;
-		var mapHeight = lvl.h * CELL_SIZE;
+		mapWidth = lvl.w * CELL_SIZE;
+		mapHeight = lvl.h * CELL_SIZE;
 
 		backgroundStyle = "#888";
 		walls = new Bsp<Wall>(mapWidth, mapHeight, 10);
@@ -76,10 +83,35 @@ class Room extends AbstractScreen{
 			lights.add(light, light.aabb);
 		}
 
+		obstacles = loadObstacles(lvl.ob);
+
 		camera = new AABB(0, 0, Main.WIDTH, Main.HEIGHT);
 
 		shadowCanvas = newCanvas();
 	}
+	
+	private function loadObstacles(od:Array<Dynamic>) {
+		var bsp = new Bsp<AbstractObstacle>(mapWidth, mapHeight, 10);
+		
+		var odit = od.iterator();
+		while(odit.hasNext()){
+			var ot:String = cast odit.next();
+			switch(ot){
+				case "c":
+					var co = new CrackObstacle(this, 
+						cast odit.next(), // x
+						cast odit.next(), // y
+						cast odit.next(), // w
+						cast odit.next()); // h
+					bsp.add(co, co.aabb);
+				default:
+					throw "Unknown obstacle type: " + ot;
+			}
+		}
+
+		return bsp;
+	}
+	
 
 	override function update(s:Float) {
 		super.update(s);
@@ -89,6 +121,11 @@ class Room extends AbstractScreen{
 
 		Main.context.save();
 		Main.context.translate(-camera.x, -camera.y);
+
+		obstacles.forEachIn(camera, o->{
+			o.update(s);
+			o.draw(Main.context);
+		});
 
 		player.draw(Main.context);
 		playerLight.x = player.x + playerLightOffset.x;
@@ -123,9 +160,8 @@ class Room extends AbstractScreen{
 		});
 		
 		Main.context.globalCompositeOperation = "source-over";
-		Main.context.globalAlpha = 0.8;
-		Main.context.drawImage(shadowCanvas.canvas, 0, 0);
 		Main.context.globalAlpha = 1;
+		Main.context.drawImage(shadowCanvas.canvas, 0, 0);
 
 		//draw luck
 		luck = Math.max(0, luck);

@@ -9,6 +9,18 @@
     ],
     "propertyTypes": [
         {
+            "color": "#ffff0000",
+            "drawFill": true,
+            "id": 6,
+            "members": [
+            ],
+            "name": "Crack",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
             "id": 3,
             "name": "Direction",
             "storageType": "string",
@@ -28,7 +40,7 @@
             "members": [
                 {
                     "name": "colour",
-                    "type": "color",
+                    "type": "string",
                     "value": ""
                 },
                 {

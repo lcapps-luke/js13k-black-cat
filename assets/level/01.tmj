@@ -115,13 +115,13 @@
         }, 
         {
          "draworder":"topdown",
-         "id":2,
-         "name":"object",
+         "id":4,
+         "name":"player",
          "objects":[
                 {
                  "ellipse":true,
                  "height":32,
-                 "id":1,
+                 "id":24,
                  "name":"player",
                  "rotation":0,
                  "type":"Player",
@@ -129,7 +129,18 @@
                  "width":32,
                  "x":96,
                  "y":96
-                }, 
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":2,
+         "name":"lights",
+         "objects":[
                 {
                  "ellipse":true,
                  "height":448,
@@ -372,12 +383,57 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
+         "visible":false,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "color":"#ff0000",
+         "draworder":"topdown",
+         "id":3,
+         "name":"obstacle",
+         "objects":[
+                {
+                 "height":64,
+                 "id":23,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Crack",
+                 "visible":true,
+                 "width":32,
+                 "x":672,
+                 "y":128
+                }, 
+                {
+                 "height":64,
+                 "id":25,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Crack",
+                 "visible":true,
+                 "width":32,
+                 "x":1648,
+                 "y":32
+                }, 
+                {
+                 "height":64,
+                 "id":26,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Crack",
+                 "visible":true,
+                 "width":32,
+                 "x":1776,
+                 "y":128
+                }],
+         "opacity":1,
+         "type":"objectgroup",
          "visible":true,
          "x":0,
          "y":0
         }],
- "nextlayerid":3,
- "nextobjectid":23,
+ "nextlayerid":5,
+ "nextobjectid":28,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

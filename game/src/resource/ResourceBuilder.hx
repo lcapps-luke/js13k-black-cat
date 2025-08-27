@@ -17,7 +17,7 @@ class ResourceBuilder {
 		var walls:String = "";
 		var width:Int;
 		var height:Int;
-		var objects:MapObjects;
+		var objects:MapObjects = null;
 		
 		for(l in mapData.layers){
 			if(l.type == "tilelayer"){
@@ -25,7 +25,7 @@ class ResourceBuilder {
 				width = l.width;
 				height = l.height;
 			}else if(l.type == "objectgroup"){
-				objects = loadObjects(l);
+				objects = loadObjects(l, objects);
 			}
 		}
 
@@ -37,6 +37,7 @@ class ResourceBuilder {
 			public var px:Int = $v{objects.playerX};
 			public var py:Int = $v{objects.playerY};
 			public var lights:Array<Dynamic> = $v{objects.lights};
+			public var ob:Array<Dynamic> = $v{objects.obstacles};
 
 			public function new() {}
 		}
@@ -57,11 +58,12 @@ class ResourceBuilder {
 		}).join("");
 	}
 
-	private static function loadObjects(l:TiledLayer):MapObjects{
-		var obj:MapObjects = {
+	private static function loadObjects(l:TiledLayer, current:MapObjects):MapObjects{
+		var obj:MapObjects = current != null ? current : {
 			playerX: 0,
 			playerY: 0,
-			lights: []
+			lights: [],
+			obstacles: []
 		};
 
 		var lightQty = 0;
@@ -85,6 +87,8 @@ class ResourceBuilder {
 					obj.lights.push(y);
 					obj.lights.push(r);
 					obj.lights.push(c);
+				case "Crack":
+					makeCrackObstacle(o, obj.obstacles);
 			}
 		}
 
@@ -121,6 +125,14 @@ class ResourceBuilder {
 		var g = argb.substr(5, 2);
 		var b = argb.substr(7, 2);
 		return '#$r$g$b$a';
+	}
+
+	private static function makeCrackObstacle(o:TiledObject, arr:Array<Dynamic>):Void{
+		arr.push("c");
+		arr.push(o.x * SCALE);
+		arr.push(o.y * SCALE);
+		arr.push(o.width * SCALE);
+		arr.push(o.height * SCALE);
 	}
 
 	#end
@@ -161,4 +173,5 @@ typedef MapObjects = {
 	var playerX:Int;
 	var playerY:Int;
 	var lights:Array<Dynamic>; //qty{x,y,r,c}
+	var obstacles:Array<Dynamic>;
 }
