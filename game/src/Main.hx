@@ -1,5 +1,6 @@
 package;
 
+import resource.Resources;
 import js.html.DivElement;
 import js.Browser;
 import js.html.CanvasRenderingContext2D;
@@ -37,7 +38,7 @@ class Main{
 
 		Ctrl.init(Browser.window, canvas);
 
-		currentScreen = new MainMenuScreen();
+		currentScreen = new LoadingScreen();
 
 		Browser.window.requestAnimationFrame(update);
 	}

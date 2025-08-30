@@ -1,9 +1,7 @@
 package resource;
 
 #if macro
-	import haxe.io.Path;
 	import sys.io.File;
-	import sys.FileSystem;
 	import haxe.macro.Context;
 	import haxe.Json;
 #end

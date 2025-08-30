@@ -1,5 +1,8 @@
 package maze;
 
+import js.html.CanvasPattern;
+import resource.Resources;
+import haxe.Resource;
 import maze.obstacle.CrackObstacle;
 import maze.obstacle.AbstractObstacle;
 import math.Vec2;
@@ -38,6 +41,10 @@ class Room extends AbstractScreen{
 	private var lvl = ResourceBuilder.buildMap("assets/level/01.tmj");
 
 	public var luck:Float = 100;
+	private var gameOver:Bool = false;
+	private var gameOverScreen:GameOverScreen;
+
+	private var bgPattern:CanvasPattern;
 
 	public function new(){
 		super();
@@ -88,6 +95,8 @@ class Room extends AbstractScreen{
 		camera = new AABB(0, 0, Main.WIDTH, Main.HEIGHT);
 
 		shadowCanvas = newCanvas();
+
+		bgPattern = Main.context.createPattern(Resources.backgroundTile, "repeat");
 	}
 	
 	private function loadObstacles(od:Array<Dynamic>) {
@@ -115,12 +124,17 @@ class Room extends AbstractScreen{
 
 	override function update(s:Float) {
 		super.update(s);
-		player.update(s);
+		if(!gameOver){
+			player.update(s);
+		}
 		camera.x = Math.max(0, player.x - camera.w / 2);
 		camera.y = Math.max(0, player.y - camera.h / 2);
 
 		Main.context.save();
 		Main.context.translate(-camera.x, -camera.y);
+
+		Main.context.fillStyle = bgPattern;
+		Main.context.fillRect(camera.x, camera.y, camera.w, camera.h);
 
 		obstacles.forEachIn(camera, o->{
 			o.update(s);
@@ -173,6 +187,21 @@ class Room extends AbstractScreen{
 		Main.context.font = "bold 10px sans-serif";
 		(cast Main.context).letterSpacing = "3px";
 		Main.context.centeredText("Luck", Main.WIDTH / 2 - LUCK_BAR_WIDTH / 2, LUCK_BAR_WIDTH, 10 + LUCK_BAR_HEIGHT * 0.8, true);
+
+		// Draw game over screen if needed
+		if(gameOver){
+			gameOverScreen.update(s);
+		}
+	}
+
+	public function hurt(qty:Float):Bool{
+		if(luck > 0){
+			luck -= qty;
+			return false;
+		}
+		gameOver = true;
+		gameOverScreen = new GameOverScreen();
+		return true;
 	}
 
 	public static function newCanvas():CanvasRenderingContext2D{

@@ -3,7 +3,7 @@ package maze.obstacle;
 import js.html.CanvasRenderingContext2D;
 
 class CrackObstacle extends AbstractObstacle {
-	private var triggered:Bool = false;
+	private var over:Bool = false;
 
     public function new(room:Room, x:Float, y:Float, w:Float, h:Float) {
         super(room);
@@ -16,12 +16,12 @@ class CrackObstacle extends AbstractObstacle {
 	public function update(s:Float) {
 		var playerOverlaps:Bool = room.player.aabb.overlaps(aabb);
 
-		if(!triggered && playerOverlaps){
-			triggered = true;
-			room.luck -= 10;
+		if(!over && playerOverlaps){
+			over = true;
+			room.hurt(10);
 		}
 
-		triggered = playerOverlaps;
+		over = playerOverlaps;
 	}
 
 	public function draw(c:CanvasRenderingContext2D) {
