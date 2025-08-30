@@ -15,17 +15,21 @@ class Resources {
 	@:native("bg")
 	public static var backgroundTile:ImageElement;
 
+	public static var images:Map<String, ImageElement> = new Map();
+
 	@:native("l")
-	public static function load(){
+	public static function load() {
 		var loaders = [
-			loadBackgroundTile
+			loadBackgroundTile,
+			() -> loadImage("c", ResourceBuilder.buildImage("crack.svg")),
+			() -> loadImage("p", ResourceBuilder.buildImage("player.svg"))
 		];
 
 		resourceQty = loaders.length;
 
 		var p = Promise.resolve();
 
-		for(l in loaders){
+		for (l in loaders) {
 			p = p.then((a) -> {
 				loadedQty++;
 				return l();
@@ -36,7 +40,7 @@ class Resources {
 	}
 
 	@:native("lbt")
-	private static function loadBackgroundTile():Promise<Int>{
+	private static function loadBackgroundTile():Promise<Int> {
 		var sz = 24;
 		return new Promise((resolve, reject) -> {
 			var ele:CanvasElement = Browser.document.createCanvasElement();
@@ -46,7 +50,7 @@ class Resources {
 			cc.fillStyle = "#888";
 			cc.fillRect(0, 0, sz, sz);
 
-			cc.lineWidth = 2;
+			cc.lineWidth = 1;
 			cc.strokeStyle = "#444";
 			cc.beginPath();
 			cc.rect(0, 0, sz, sz);
@@ -56,15 +60,30 @@ class Resources {
 			cc.strokeStyle = "#666";
 			cc.rect(2, 2, sz - 4, sz - 4);
 			cc.stroke();
-			
+
 			backgroundTile = Browser.document.createImageElement();
 			backgroundTile.src = ele.toDataURL();
 			backgroundTile.onload = () -> {
 				resolve(1);
 			};
 			backgroundTile.onerror = (e) -> {
-				reject("Failed to load background tile");
+				reject(e);
 			};
+		});
+	}
+
+	private static function loadImage(name:String, data:String):Promise<Int> {
+		return new Promise((resolve, reject) -> {
+			var d = "data:image/svg+xml;base64," + Browser.window.btoa(data);
+			var i:ImageElement = Browser.document.createImageElement();
+			i.onload = () -> {
+				images.set(name, i);
+				resolve(1);
+			};
+			i.onerror = function(e) {
+				reject(e);
+			}
+			i.setAttribute("src", d);
 		});
 	}
 }

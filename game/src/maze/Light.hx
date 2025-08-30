@@ -14,13 +14,16 @@ class Light extends AbstractEntity{
 	private var colour:String;
 	private var dirty = true;
 
-	public function new(room:Room, radius:Float, colour:String){
+	private var castPlayer:Bool;
+
+	public function new(room:Room, radius:Float, colour:String, castPlayer:Bool = true){
 		super(room);
 		aabb.w = radius * 2;
 		aabb.h = radius * 2;
 		offset.set(radius, radius);
 
 		this.colour = colour;
+		this.castPlayer = castPlayer;
 	}
 
 	public function update(s:Float) {
@@ -51,6 +54,9 @@ class Light extends AbstractEntity{
 		room.walls.forEachIn(aabb, w->{
 			w.drawShadow(shadowCtx, x, y, offset.x);
 		});
+		if(castPlayer){
+			room.player.drawShadow(shadowCtx, x, y, offset.x);
+		}
 
 		dirty = false;
 

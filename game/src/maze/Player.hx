@@ -1,5 +1,9 @@
 package maze;
 
+import math.Vec2;
+import js.lib.Math;
+import js.html.ImageElement;
+import resource.Resources;
 import math.AABB;
 import js.html.CanvasRenderingContext2D;
 
@@ -9,6 +13,11 @@ class Player extends AbstractEntity {
 	private static inline var MOVE_SPEED = 128;
 
 	private var nextAABB = new AABB();
+	private var i:ImageElement;
+
+	private var a:Float = 0;
+	private var sa:Vec2 = new Vec2();
+	private var sb:Vec2 = new Vec2();
 
 	public function new(room:Room) {
 		super(room);
@@ -18,6 +27,8 @@ class Player extends AbstractEntity {
 
 		nextAABB.w = aabb.w;
 		nextAABB.h = aabb.h;
+
+		this.i = Resources.images.get("p");
 	}
 
 	public function update(s:Float) {
@@ -31,6 +42,8 @@ class Player extends AbstractEntity {
 			var md = Math.atan2(cy, cx);
 			mx = Math.cos(md) * MOVE_SPEED * s;
 			my = Math.sin(md) * MOVE_SPEED * s;
+
+			this.a = Math.atan2(my, mx);
 		}
 
 		nextAABB.x = aabb.x + mx;
@@ -58,10 +71,38 @@ class Player extends AbstractEntity {
 	}
 
 	public function draw(c:CanvasRenderingContext2D) {
-		c.beginPath();
-		c.fillStyle = "blue";
-		c.circle(x, y, offset.x);
-		c.fill();
+		c.save();
+		c.translate(x, y);
+		c.rotate(a);
+		c.translate(-offset.x, -offset.y);
+		c.drawImage(i, 0, 0);
+		c.restore();
 	}
 
+
+	public function drawShadow(c:CanvasRenderingContext2D, lx:Float, ly:Float, lr:Float) {
+		var ldir = Math.atan2(y - ly, x - lx);
+
+		var ax = x + Math.cos(ldir + Math.PI * 0.5) * -5;
+		var ay = y + Math.sin(ldir + Math.PI * 0.5) * -5;
+		var bx = x + Math.cos(ldir + Math.PI * 0.5) * 5;
+		var by = y + Math.sin(ldir + Math.PI * 0.5) * 5;
+
+		var da:Float = Math.atan2(ay - ly, ax - lx);
+		var db:Float = Math.atan2(by - ly, bx - lx);
+
+		var d = Math.sqrt(Math.pow(this.x - lx, 2) + Math.pow(this.y - ly, 2));
+
+		var cpx = x + Math.cos(ldir) * (d * 1.5 + 10);
+		var cpy = y + Math.sin(ldir) * (d * 1.5 + 10);
+
+		c.filter = "blur(2px)";
+		c.beginPath();
+		c.moveTo(ax, ay);
+		c.quadraticCurveTo(x + Math.cos(ldir) * 5, y + Math.sin(ldir) * 5, bx, by);
+		c.lineTo(bx + Math.cos(db) * d, by + Math.sin(db) * d);
+		c.quadraticCurveTo(cpx, cpy, ax + Math.cos(da) * d, ay + Math.sin(da) * d);
+		c.lineTo(ax, ay);
+		c.fill();
+	}
 }

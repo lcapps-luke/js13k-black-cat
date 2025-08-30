@@ -75,7 +75,7 @@ class Room extends AbstractScreen{
 		player.x = lvl.px;
 		player.y = lvl.py;
 
-		playerLight = new Light(this, 48, "#FFA700FF");
+		playerLight = new Light(this, 48, "#FFA700FF", false);
 
 		lights = new Bsp<Light>(mapWidth, mapHeight, 10);
 		var lightQty:Int = Math.floor(lvl.lights.length / 4);
