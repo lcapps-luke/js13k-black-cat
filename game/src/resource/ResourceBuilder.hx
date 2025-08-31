@@ -28,7 +28,7 @@ class ResourceBuilder {
 				width = l.width;
 				height = l.height;
 			}else if(l.type == "objectgroup"){
-				objects = loadObjects(l, objects);
+				objects = loadObjects(l, objects, mapData);
 			}
 		}
 
@@ -86,7 +86,7 @@ class ResourceBuilder {
 		}).join("");
 	}
 
-	private static function loadObjects(l:TiledLayer, current:MapObjects):MapObjects{
+	private static function loadObjects(l:TiledLayer, current:MapObjects, mapData:TiledMap):MapObjects{
 		var obj:MapObjects = current != null ? current : {
 			playerX: 0,
 			playerY: 0,
@@ -117,6 +117,10 @@ class ResourceBuilder {
 					obj.lights.push(c);
 				case "Crack":
 					makeCrackObstacle(o, obj.obstacles);
+				case "Checkpoint":
+					makeCheckpoint(o, obj.obstacles, mapData);
+				case "Gate":
+					makeGate(o, obj.obstacles, mapData);
 			}
 		}
 
@@ -132,19 +136,24 @@ class ResourceBuilder {
 		throw "No colour property found";
 	}
 
-	private static function getDirectionPropOffset(props:Array<TiledProperty>):Array<Int>{
+	private static function getProperty(props:Array<TiledProperty>, name:String):String{
 		for(p in props){
-			if(p.name == "direction"){
-				return switch(p.value){
-					case "UP": [0, -4];
-					case "DOWN": [0, 4];
-					case "LEFT": [-4, 0];
-					case "RIGHT": [4, 0];
-					default: throw 'Unknown direction value: ${p.value}';
-				}
+			if(p.name == name){
+				return Std.string(p.value);
 			}
 		}
-		throw "No direction property found";
+		throw 'No ${name} property found';
+	}
+
+	private static function getDirectionPropOffset(props:Array<TiledProperty>):Array<Int>{
+		var dir = getProperty(props, "direction");
+		return switch(dir){
+			case "UP": [0, -4];
+			case "DOWN": [0, 4];
+			case "LEFT": [-4, 0];
+			case "RIGHT": [4, 0];
+			default: throw 'Unknown direction value: ${dir}';
+		}
 	}
 
 	private static function argbTorgba(argb:String):String{
@@ -155,20 +164,59 @@ class ResourceBuilder {
 		return '#$r$g$b$a';
 	}
 
-	private static function makeCrackObstacle(o:TiledObject, arr:Array<Dynamic>):Void{
-		arr.push("c");
-		arr.push(o.x * SCALE);
-		arr.push(o.y * SCALE);
-		arr.push(o.width * SCALE);
-		arr.push(o.height * SCALE);
-	}
-
 	private static function cleanDir(dir) {
 		for (f in FileSystem.readDirectory(dir)) {
 			if (!FileSystem.isDirectory(dir + f)) {
 				FileSystem.deleteFile(dir + f);
 			}
 		}
+	}
+
+	private static function findObject(mapData:TiledMap, id:Int):TiledObject {
+		for(layer in mapData.layers) {
+			if(layer.type != "objectgroup"){
+				continue;
+			}
+
+			for(obj in layer.objects) {
+				if(obj.id == id) {
+					return obj;
+				}
+			}
+		}
+		throw "Object not found: " + id;
+	}
+
+	private static function makeCrackObstacle(o:TiledObject, arr:Array<Dynamic>):Void{
+		arr.push(ObjectIds.CRACK);
+		arr.push(o.x * SCALE);
+		arr.push(o.y * SCALE);
+		arr.push(o.width * SCALE);
+		arr.push(o.height * SCALE);
+	}
+
+	private static function makeCheckpoint(o:TiledObject, arr:Array<Dynamic>, mapData:TiledMap):Void{
+		var spawnObjId = Std.parseInt(getProperty(o.properties, "spawn"));
+		var spawnObj = findObject(mapData, spawnObjId);
+
+		arr.push(ObjectIds.CHECKPOINT);
+		arr.push(Math.round((o.x + o.width / 2) * SCALE));
+		arr.push(Math.round((o.y + o.height / 2) * SCALE));
+		arr.push(Math.round(spawnObj.x * SCALE));
+		arr.push(Math.round(spawnObj.y * SCALE));
+	}
+
+	private static function makeGate(o:TiledObject, arr:Array<Dynamic>, mapData:TiledMap):Void{
+		var switchObjId = Std.parseInt(getProperty(o.properties, "switch"));
+		var switchObj = findObject(mapData, switchObjId);
+
+		arr.push(ObjectIds.GATE);
+		arr.push(o.x * SCALE);
+		arr.push(o.y * SCALE);
+		arr.push(o.width * SCALE);
+		arr.push(o.height * SCALE);
+		arr.push(switchObj.x * SCALE);
+		arr.push(switchObj.y * SCALE);
 	}
 
 	#end
@@ -196,6 +244,7 @@ typedef TiledObject = {
 	var width:Float;
 	var height:Float;
 	var type:String;
+	var id:Int;
 	var properties:Array<TiledProperty>;
 }
 

@@ -1,8 +1,11 @@
 package maze;
 
+import maze.obstacle.Switch;
+import maze.obstacle.Gate;
+import maze.obstacle.Checkpoint;
+import resource.ObjectIds;
 import js.html.CanvasPattern;
 import resource.Resources;
-import haxe.Resource;
 import maze.obstacle.CrackObstacle;
 import maze.obstacle.AbstractObstacle;
 import math.Vec2;
@@ -45,6 +48,7 @@ class Room extends AbstractScreen{
 	private var gameOverScreen:GameOverScreen;
 
 	private var bgPattern:CanvasPattern;
+	public var interactionHint:String = "test";
 
 	public function new(){
 		super();
@@ -58,9 +62,7 @@ class Room extends AbstractScreen{
 		var ny = 0;
 		for(c in lvl.walls.split("")){
 			if(c == "w"){
-				var w = new Wall(this);
-				w.x = nx * CELL_SIZE;
-				w.y = ny * CELL_SIZE;
+				var w = new Wall(this,  nx * CELL_SIZE,  ny * CELL_SIZE);
 				walls.add(w, w.aabb);
 			}
 
@@ -90,7 +92,8 @@ class Room extends AbstractScreen{
 			lights.add(light, light.aabb);
 		}
 
-		obstacles = loadObstacles(lvl.ob);
+		obstacles = new Bsp<AbstractObstacle>(mapWidth, mapHeight, 10);
+		loadObjects(lvl.ob);
 
 		camera = new AABB(0, 0, Main.WIDTH, Main.HEIGHT);
 
@@ -99,28 +102,46 @@ class Room extends AbstractScreen{
 		bgPattern = Main.context.createPattern(Resources.backgroundTile, "repeat");
 	}
 	
-	private function loadObstacles(od:Array<Dynamic>) {
-		var bsp = new Bsp<AbstractObstacle>(mapWidth, mapHeight, 10);
-		
+	private function loadObjects(od:Array<Dynamic>) {
 		var odit = od.iterator();
 		while(odit.hasNext()){
 			var ot:String = cast odit.next();
 			switch(ot){
-				case "c":
+				case ObjectIds.CRACK:
 					var co = new CrackObstacle(this, 
 						cast odit.next(), // x
 						cast odit.next(), // y
 						cast odit.next(), // w
 						cast odit.next()); // h
-					bsp.add(co, co.aabb);
+					obstacles.add(co, co.aabb);
+				case ObjectIds.CHECKPOINT:
+					var cp = new Checkpoint(this,
+						cast odit.next(), // x
+						cast odit.next(), // y
+						cast odit.next(), // spawnX
+						cast odit.next()); // spawnY
+					obstacles.add(cp, cp.aabb);
+				case ObjectIds.GATE:
+					var g = Gate.makeWalls(this,
+						cast odit.next(), // x
+						cast odit.next(), // y
+						cast odit.next(), // w
+						cast odit.next()); // h
+						trace(g);
+
+					for(m in g){
+						walls.add(m, m.aabb);
+					}
+					var s = new Switch(this, 
+						cast odit.next(), // x
+						cast odit.next()); // y
+					s.walls = g;
+					walls.add(s, s.aabb);
 				default:
 					throw "Unknown obstacle type: " + ot;
 			}
 		}
-
-		return bsp;
 	}
-	
 
 	override function update(s:Float) {
 		super.update(s);
@@ -176,6 +197,11 @@ class Room extends AbstractScreen{
 		Main.context.globalCompositeOperation = "source-over";
 		Main.context.globalAlpha = 1;
 		Main.context.drawImage(shadowCanvas.canvas, 0, 0);
+
+		Main.context.fillStyle = "#fff";
+		Main.context.font = "bold 10px sans-serif";
+		Main.context.centeredText(interactionHint, player.x - camera.x, 0, player.y - camera.y - 10);
+		interactionHint = "";
 
 		//draw luck
 		luck = Math.max(0, luck);

@@ -35,7 +35,8 @@ class Ctrl {
 
 	@:native("a")
 	public static var action(default, null):Bool = false;
-
+	@:native("ap")
+	public static var actionPress(default, null):Bool = false;
 
 	@:native("g")
 	private static var gamepad:Gamepad = null;
@@ -165,7 +166,10 @@ class Ctrl {
 		right = checkKeys(["ArrowRight", "KeyD"]) || checkButtons([15], [0, 2], f -> f > 0.3) || checkOnScreenButton(ON_SCREEN_RIGHT);
 		up = checkKeys(["ArrowUp", "KeyW"]) || checkButtons([12], [1, 3], f -> f < -0.3) || checkOnScreenButton(ON_SCREEN_UP);
 		down = checkKeys(["ArrowDown", "KeyS"]) || checkButtons([13], [1, 3], f -> f > 0.3) || checkOnScreenButton(ON_SCREEN_DOWN);
+		
+		var oldAction = action;
 		action = checkKeys(["Space", "Enter"]) || checkButtons([0, 1, 2, 3], []) || checkOnScreenButton(ON_SCREEN_ACTION);
+		actionPress = (!oldAction && action);
 	}
 
 	@:native("ck")

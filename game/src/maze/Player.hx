@@ -50,9 +50,11 @@ class Player extends AbstractEntity {
 		nextAABB.y = aabb.y;
 
 		room.walls.forEachIn(nextAABB, w -> {
-			mx = aabb.moveContactX(w.aabb, mx);
-			if (mx != 0) {
-				mx = mx > 0 ? mx - 0.2 : mx + 0.2;
+			if(w.alive){
+				mx = aabb.moveContactX(w.aabb, mx);
+				if (mx != 0) {
+					mx = mx > 0 ? mx - 0.2 : mx + 0.2;
+				}
 			}
 		});
 
@@ -60,9 +62,11 @@ class Player extends AbstractEntity {
 		nextAABB.y = aabb.y + my;
 
 		room.walls.forEachIn(nextAABB, w -> {
-			my = aabb.moveContactY(w.aabb, my);
-			if (my != 0) {
-				my = my > 0 ? my - 0.2 : my + 0.2;
+			if(w.alive){
+				my = aabb.moveContactY(w.aabb, my);
+				if (my != 0) {
+					my = my > 0 ? my - 0.2 : my + 0.2;
+				}
 			}
 		});
 

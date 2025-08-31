@@ -9,6 +9,53 @@
     ],
     "propertyTypes": [
         {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 11,
+            "members": [
+                {
+                    "name": "region",
+                    "type": "object",
+                    "value": 0
+                }
+            ],
+            "name": "Cat",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ffaa007f",
+            "drawFill": true,
+            "id": 10,
+            "members": [
+            ],
+            "name": "CatRegion",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object"
+            ]
+        },
+        {
+            "color": "#ffc76400",
+            "drawFill": true,
+            "id": 13,
+            "members": [
+                {
+                    "name": "spawn",
+                    "type": "object",
+                    "value": 0
+                }
+            ],
+            "name": "Checkpoint",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
             "color": "#ffff0000",
             "drawFill": true,
             "id": 6,
@@ -32,6 +79,36 @@
                 "RIGHT"
             ],
             "valuesAsFlags": false
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 8,
+            "members": [
+                {
+                    "name": "switch",
+                    "type": "object",
+                    "value": 0
+                }
+            ],
+            "name": "Gate",
+            "type": "class",
+            "useAs": [
+                "object",
+                "tile"
+            ]
+        },
+        {
+            "color": "#ffaa5500",
+            "drawFill": true,
+            "id": 12,
+            "members": [
+            ],
+            "name": "Ladder",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
         },
         {
             "color": "#ffffff00",
@@ -65,6 +142,32 @@
             "name": "Player",
             "type": "class",
             "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ffffaa00",
+            "drawFill": true,
+            "id": 7,
+            "members": [
+            ],
+            "name": "Switch",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object"
+            ]
+        },
+        {
+            "color": "#ff00007f",
+            "drawFill": true,
+            "id": 14,
+            "members": [
+            ],
+            "name": "SpawnPoint",
+            "type": "class",
+            "useAs": [
+                "property",
                 "object"
             ]
         }
