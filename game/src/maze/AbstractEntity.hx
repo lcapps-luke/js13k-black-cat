@@ -18,7 +18,7 @@ abstract class AbstractEntity {
 	}
 
 	abstract public function update(s:Float):Void;
-	abstract public function draw(c:CanvasRenderingContext2D):Void;
+	abstract public function draw(c:CanvasRenderingContext2D):CanvasRenderingContext2D->Void;
 
 	function set_x(value:Float):Float {
 		aabb.x = value - offset.x;

@@ -1,11 +1,20 @@
 package maze.obstacle;
 
+import resource.Resources;
+import js.html.ImageElement;
+import math.AABB;
 import js.html.CanvasRenderingContext2D;
 using ui.ContextUtils;
 
 class Checkpoint extends AbstractObstacle {
+	private static inline var SOLID_RADIUS = 6;
+
 	private var spawnX:Float;
 	private var spawnY:Float;
+	private var iBox:AABB;
+
+	private var ia:ImageElement;
+	private var ib:ImageElement;
 
 	public function new(room:Room, x:Float, y:Float, spawnX:Float, spawnY:Float) {
 		super(room);
@@ -16,20 +25,34 @@ class Checkpoint extends AbstractObstacle {
 		this.y = y;
 		this.spawnX = spawnX;
 		this.spawnY = spawnY;
+
+		iBox = new AABB(x - 16, y - 16, 32, 32);
+		ia = Resources.images.get(Resources.PLANTER);
+		ib = Resources.images.get(Resources.BRANCHES);
 	}
 
 	public function update(s:Float) {
-		var playerOverlaps:Bool = room.player.aabb.overlaps(aabb);
+		if(iBox.overlaps(room.player.aabb)){
+			room.interactionHint = "Knock on wood";
 
-		if(playerOverlaps){
-			//TODO interaction hint
+			if(Ctrl.actionPress){
+				room.saveCheckpoint(spawnX, spawnY);
+			}
 		}
 	}
 
 	public function draw(c:CanvasRenderingContext2D) {
-		c.beginPath();
-		c.fillStyle = "#0f0";
-		c.circle(x, y, 24);
-		c.fill();
+		c.drawImage(ia, aabb.x, aabb.y);
+		return drawB;
+	}
+
+	public function drawB(c:CanvasRenderingContext2D):Void {
+		c.drawImage(ib, aabb.x - 20, aabb.y - 14);
+	}
+
+	public function makeWall() {
+		var w = new Wall(room, x - SOLID_RADIUS, y - SOLID_RADIUS, SOLID_RADIUS * 2, SOLID_RADIUS * 2);
+		w.visible = false;
+		return w;
 	}
 }

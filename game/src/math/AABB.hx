@@ -50,7 +50,7 @@ class AABB{
 
 	@:native("mc")
 	private static function moveContact(l:Float, h:Float, ol:Float, oh:Float, m:Float):Float {
-		var d:Float = m > 0 ? ol - h : oh - l;
+		var d:Float = (m > 0 ? ol - h : oh - l) * 0.9;
 		return m > 0 ? Math.min(Math.abs(d), Math.abs(m)) : -Math.min(Math.abs(d), Math.abs(m));
 	}
 }

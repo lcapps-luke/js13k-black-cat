@@ -21,14 +21,14 @@ class Player extends AbstractEntity {
 
 	public function new(room:Room) {
 		super(room);
-		aabb.w = Room.CELL_SIZE;
-		aabb.h = Room.CELL_SIZE;
-		offset.set(Room.CELL_SIZE / 2, Room.CELL_SIZE / 2);
+		aabb.w = 13;
+		aabb.h = 13;
+		offset.set(aabb.w / 2, aabb.h / 2);
 
 		nextAABB.w = aabb.w;
 		nextAABB.h = aabb.h;
 
-		this.i = Resources.images.get("p");
+		this.i = Resources.images.get(Resources.PLAYER);
 	}
 
 	public function update(s:Float) {
@@ -39,11 +39,9 @@ class Player extends AbstractEntity {
 		var my = 0.0;
 
 		if (cx != 0 || cy != 0) {
-			var md = Math.atan2(cy, cx);
-			mx = Math.cos(md) * MOVE_SPEED * s;
-			my = Math.sin(md) * MOVE_SPEED * s;
-
-			this.a = Math.atan2(my, mx);
+			this.a = Math.atan2(cy, cx);
+			mx = Math.cos(this.a) * MOVE_SPEED * s;
+			my = Math.sin(this.a) * MOVE_SPEED * s;
 		}
 
 		nextAABB.x = aabb.x + mx;
@@ -74,13 +72,14 @@ class Player extends AbstractEntity {
 		y += my;
 	}
 
-	public function draw(c:CanvasRenderingContext2D) {
+	public function draw(c:CanvasRenderingContext2D):CanvasRenderingContext2D->Void {
 		c.save();
 		c.translate(x, y);
 		c.rotate(a);
-		c.translate(-offset.x, -offset.y);
+		c.translate(-i.naturalWidth / 2, -i.naturalHeight / 2);
 		c.drawImage(i, 0, 0);
 		c.restore();
+		return null;
 	}
 
 

@@ -64,9 +64,10 @@ class Light extends AbstractEntity{
 		shadowCtx.restore();
 	}
 
-	public function draw(c:CanvasRenderingContext2D) {
+	public function draw(c:CanvasRenderingContext2D):CanvasRenderingContext2D->Void {
 		updateCtx();
 		c.drawImage(shadowCtx.canvas, 0, 0);
+		return null;
 	}
 
 	public function drawGlow(c:CanvasRenderingContext2D) {

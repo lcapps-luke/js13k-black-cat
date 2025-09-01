@@ -25,6 +25,8 @@ class Room extends AbstractScreen{
 	public static inline var LUCK_BAR_WIDTH = Main.WIDTH * 0.5;
 	public static inline var LUCK_BAR_HEIGHT = LUCK_BAR_WIDTH * 0.1;
 
+	private static var CHECKPOINT:Vec2 = null;
+
 	private var mapWidth:Int;
 	private var mapHeight:Int;
 
@@ -50,6 +52,8 @@ class Room extends AbstractScreen{
 	private var bgPattern:CanvasPattern;
 	public var interactionHint:String = "test";
 
+	private var deferredDraws = new List<CanvasRenderingContext2D->Void>();
+
 	public function new(){
 		super();
 		mapWidth = lvl.w * CELL_SIZE;
@@ -74,8 +78,9 @@ class Room extends AbstractScreen{
 		}
 
 		player = new Player(this);
-		player.x = lvl.px;
-		player.y = lvl.py;
+		CHECKPOINT = loadCheckpoint();
+		player.x = CHECKPOINT == null ? lvl.px : CHECKPOINT.x;
+		player.y = CHECKPOINT == null ? lvl.py : CHECKPOINT.y;
 
 		playerLight = new Light(this, 48, "#FFA700FF", false);
 
@@ -121,6 +126,8 @@ class Room extends AbstractScreen{
 						cast odit.next(), // spawnX
 						cast odit.next()); // spawnY
 					obstacles.add(cp, cp.aabb);
+					var cw = cp.makeWall();
+					walls.add(cw, cw.aabb);
 				case ObjectIds.GATE:
 					var g = Gate.makeWalls(this,
 						cast odit.next(), // x
@@ -159,7 +166,10 @@ class Room extends AbstractScreen{
 
 		obstacles.forEachIn(camera, o->{
 			o.update(s);
-			o.draw(Main.context);
+			var dd = o.draw(Main.context);
+			if(dd != null){
+				deferredDraws.add(dd);
+			}
 		});
 
 		player.draw(Main.context);
@@ -170,6 +180,11 @@ class Room extends AbstractScreen{
 			playerLightFlickerTimer = FLICKER_TIME;
 			playerLightOffset.set(Random.range(-1, 1), Random.range(-1, 1));
 		}
+
+		for(d in deferredDraws){
+			d(Main.context);
+		}
+		deferredDraws.clear();
 
 		walls.forEachIn(camera, w->{
 			w.update(s);
@@ -238,5 +253,19 @@ class Room extends AbstractScreen{
 		var cc = ele.getContext2d();
 
 		return cc;
+	}
+
+	public function saveCheckpoint(x:Float, y:Float) {
+		CHECKPOINT = new Vec2(x, y);
+		Browser.getLocalStorage()?.setItem("lcann.bcm.chkpt", x + "," + y);
+	}
+
+	public static function loadCheckpoint():Vec2{
+		var data = Browser.getLocalStorage()?.getItem("lcann.bcm.chkpt");
+		if(data != null){
+			var pos = data.split(",");
+			return new Vec2(Std.parseFloat(pos[0]), Std.parseFloat(pos[1]));
+		}
+		return null;
 	}
 }

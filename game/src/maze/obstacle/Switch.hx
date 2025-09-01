@@ -25,9 +25,10 @@ class Switch extends Wall {
 		}
 	}
 
-	override function draw(c:CanvasRenderingContext2D) {
+	override function draw(c:CanvasRenderingContext2D):CanvasRenderingContext2D->Void {
 		c.fillStyle = "#f00";
 		c.fillRect(x, y, aabb.w, aabb.h);
+		return null;
 	}
 
 	override function drawShadow(c:CanvasRenderingContext2D, lx:Float, ly:Float, d:Float) {

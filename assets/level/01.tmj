@@ -382,7 +382,7 @@
                 }, 
                 {
                  "ellipse":true,
-                 "height":448,
+                 "height":384,
                  "id":16,
                  "name":"",
                  "properties":[
@@ -400,9 +400,9 @@
                  "rotation":0,
                  "type":"Light",
                  "visible":true,
-                 "width":448,
-                 "x":832,
-                 "y":672
+                 "width":384,
+                 "x":864,
+                 "y":704
                 }, 
                 {
                  "ellipse":true,
@@ -502,7 +502,7 @@
                 }, 
                 {
                  "ellipse":true,
-                 "height":448,
+                 "height":384,
                  "id":51,
                  "name":"",
                  "properties":[
@@ -520,9 +520,9 @@
                  "rotation":0,
                  "type":"Light",
                  "visible":true,
-                 "width":448,
-                 "x":960,
-                 "y":672
+                 "width":384,
+                 "x":992,
+                 "y":704
                 }, 
                 {
                  "ellipse":true,
@@ -563,7 +563,7 @@
                          "name":"direction",
                          "propertytype":"Direction",
                          "type":"string",
-                         "value":"UP"
+                         "value":"DOWN"
                         }],
                  "rotation":0,
                  "type":"Light",
@@ -691,10 +691,34 @@
                  "width":768,
                  "x":624,
                  "y":2432
+                }, 
+                {
+                 "ellipse":true,
+                 "height":320,
+                 "id":59,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"colour",
+                         "type":"color",
+                         "value":"#ffaaff7f"
+                        }, 
+                        {
+                         "name":"direction",
+                         "propertytype":"Direction",
+                         "type":"string",
+                         "value":"UP"
+                        }],
+                 "rotation":0,
+                 "type":"Light",
+                 "visible":true,
+                 "width":320,
+                 "x":1856,
+                 "y":2656
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -757,7 +781,7 @@
                  "name":"",
                  "point":true,
                  "rotation":0,
-                 "type":"",
+                 "type":"SpawnPoint",
                  "visible":true,
                  "width":0,
                  "x":1008,
@@ -932,7 +956,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":59,
+ "nextobjectid":60,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

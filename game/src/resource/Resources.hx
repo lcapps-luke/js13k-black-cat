@@ -7,6 +7,11 @@ import js.lib.Promise;
 
 @:native("Res")
 class Resources {
+	public static inline var CRACK = "c";
+	public static inline var PLAYER = "p";
+	public static inline var PLANTER = "l";
+	public static inline var BRANCHES = "b";
+
 	@:native("rq")
 	public static var resourceQty:Int = 0;
 	@:native("lq")
@@ -21,8 +26,10 @@ class Resources {
 	public static function load() {
 		var loaders = [
 			loadBackgroundTile,
-			() -> loadImage("c", ResourceBuilder.buildImage("crack.svg")),
-			() -> loadImage("p", ResourceBuilder.buildImage("player.svg"))
+			() -> loadImage(CRACK, ResourceBuilder.buildImage("crack.svg")),
+			() -> loadImage(PLAYER, ResourceBuilder.buildImage("player.svg")),
+			() -> loadImage(PLANTER, ResourceBuilder.buildImage("planter.svg")),
+			() -> loadImage(BRANCHES, ResourceBuilder.buildImage("branches.svg"))
 		];
 
 		resourceQty = loaders.length;

@@ -30,7 +30,7 @@ class GameOverScreen extends AbstractScreen{
 
 		Main.context.fillStyle = "#FFF";
 		Main.context.font = "20px monospace";
-		Main.context.centeredText("Game Over", 0, Main.WIDTH, Main.HEIGHT * 0.25);
+		Main.context.centeredText("Your luck ran out", 0, Main.WIDTH, Main.HEIGHT * 0.25);
 		Main.context.font = "10px monospace";
 		Main.context.centeredText("Press any key to retry", 0, Main.WIDTH, Main.HEIGHT * 0.5);
 

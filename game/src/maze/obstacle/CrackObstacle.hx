@@ -14,7 +14,7 @@ class CrackObstacle extends AbstractObstacle {
 		aabb.h = h;
 		this.x = x;
 		this.y = y;
-		this.i = Resources.images.get("c");
+		this.i = Resources.images.get(Resources.CRACK);
 	}
 
 	public function update(s:Float) {
@@ -28,7 +28,8 @@ class CrackObstacle extends AbstractObstacle {
 		over = playerOverlaps;
 	}
 
-	public function draw(c:CanvasRenderingContext2D) {
+	public function draw(c:CanvasRenderingContext2D):CanvasRenderingContext2D->Void {
 		c.drawImage(i, x, y, aabb.w, aabb.h);
+		return null;
 	}
 }
