@@ -1,5 +1,6 @@
 package maze;
 
+import maze.obstacle.CatRegion;
 import maze.obstacle.Switch;
 import maze.obstacle.Gate;
 import maze.obstacle.Checkpoint;
@@ -134,7 +135,6 @@ class Room extends AbstractScreen{
 						cast odit.next(), // y
 						cast odit.next(), // w
 						cast odit.next()); // h
-						trace(g);
 
 					for(m in g){
 						walls.add(m, m.aabb);
@@ -144,6 +144,15 @@ class Room extends AbstractScreen{
 						cast odit.next()); // y
 					s.walls = g;
 					walls.add(s, s.aabb);
+				case ObjectIds.CAT:
+					var cr = new CatRegion(this,
+						cast odit.next(), // x
+						cast odit.next(), // y
+						cast odit.next(), // rx
+						cast odit.next(), // ry
+						cast odit.next(), // rw
+						cast odit.next()); // rh
+					obstacles.add(cr, cr.aabb);
 				default:
 					throw "Unknown obstacle type: " + ot;
 			}

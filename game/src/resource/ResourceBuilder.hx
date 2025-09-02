@@ -121,6 +121,8 @@ class ResourceBuilder {
 					makeCheckpoint(o, obj.obstacles, mapData);
 				case "Gate":
 					makeGate(o, obj.obstacles, mapData);
+				case "Cat":
+					makeCat(o, obj.obstacles, mapData);
 			}
 		}
 
@@ -217,6 +219,19 @@ class ResourceBuilder {
 		arr.push(o.height * SCALE);
 		arr.push(switchObj.x * SCALE);
 		arr.push(switchObj.y * SCALE);
+	}
+
+	private static function makeCat(o:TiledObject, arr:Array<Dynamic>, mapData:TiledMap):Void{
+		var regionObjId = Std.parseInt(getProperty(o.properties, "region"));
+		var regionObj = findObject(mapData, regionObjId);
+
+		arr.push(ObjectIds.CAT);
+		arr.push(o.x * SCALE);
+		arr.push(o.y * SCALE);
+		arr.push(regionObj.x * SCALE);
+		arr.push(regionObj.y * SCALE);
+		arr.push(regionObj.width * SCALE);
+		arr.push(regionObj.height * SCALE);
 	}
 
 	#end
