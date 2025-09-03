@@ -11,6 +11,8 @@ class Resources {
 	public static inline var PLAYER = "p";
 	public static inline var PLANTER = "l";
 	public static inline var BRANCHES = "b";
+	public static inline var SWITCH = "s";
+	public static inline var CAT = "a";
 
 	@:native("rq")
 	public static var resourceQty:Int = 0;
@@ -20,6 +22,7 @@ class Resources {
 	@:native("bg")
 	public static var backgroundTile:ImageElement;
 
+	@:native("i")
 	public static var images:Map<String, ImageElement> = new Map();
 
 	@:native("l")
@@ -29,7 +32,9 @@ class Resources {
 			() -> loadImage(CRACK, ResourceBuilder.buildImage("crack.svg")),
 			() -> loadImage(PLAYER, ResourceBuilder.buildImage("player.svg")),
 			() -> loadImage(PLANTER, ResourceBuilder.buildImage("planter.svg")),
-			() -> loadImage(BRANCHES, ResourceBuilder.buildImage("branches.svg"))
+			() -> loadImage(BRANCHES, ResourceBuilder.buildImage("branches.svg")),
+			() -> loadImage(SWITCH, ResourceBuilder.buildImage("switch.svg")),
+			() -> loadImage(CAT, ResourceBuilder.buildImage("cat.svg"))
 		];
 
 		resourceQty = loaders.length;

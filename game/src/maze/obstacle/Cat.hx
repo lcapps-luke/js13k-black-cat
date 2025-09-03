@@ -1,5 +1,7 @@
 package maze.obstacle;
 
+import resource.Resources;
+import js.html.ImageElement;
 import math.Vec2;
 import math.AABB;
 import js.html.CanvasRenderingContext2D;
@@ -12,6 +14,9 @@ class Cat extends AbstractEntity{
 	private var md = new Vec2();
 	private var cr = new AABB(0, 0, 16, 16);
 
+	private var i:ImageElement;
+	private var a:Float = 0;
+
 	public function new(room:Room, x:Float, y:Float, region:CatRegion) {
 		super(room);
 		aabb.w = 16;
@@ -20,6 +25,8 @@ class Cat extends AbstractEntity{
 		this.x = x;
 		this.y = y;
 		this.region = region;
+
+		i = Resources.images.get(Resources.CAT);
 	}
 
 	public function update(s:Float) {
@@ -31,6 +38,7 @@ class Cat extends AbstractEntity{
 				case 2: md.y = -1;
 				case 3: md.y = 1;
 			}
+			a = Math.atan2(md.y, md.x);
 		}
 
 		// look ahead
@@ -71,6 +79,7 @@ class Cat extends AbstractEntity{
 
 		var nd = firstFree(co);
 		md.set(nd[0], nd[1]);
+		a = Math.atan2(md.y, md.x);
 	}
 
 	private function firstFree(xyl:Array<Array<Float>>){
@@ -83,8 +92,18 @@ class Cat extends AbstractEntity{
 	}
 
 	public function draw(c:CanvasRenderingContext2D):CanvasRenderingContext2D -> Void {
+		c.save();
+		c.translate(x, y);
+		c.rotate(a);
+		c.translate(-i.naturalWidth / 2, -i.naturalHeight / 2);
+		c.drawImage(i, 0, 0);
+		c.restore();
+		return null;
+
+		/*
 		c.fillStyle = "#0F0";
 		c.fillRect(aabb.x, aabb.y, aabb.w, aabb.h);
 		return null;
+		*/
 	}
 }
