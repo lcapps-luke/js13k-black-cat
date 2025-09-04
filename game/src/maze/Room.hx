@@ -1,5 +1,6 @@
 package maze;
 
+import maze.obstacle.Ladder;
 import maze.obstacle.CatRegion;
 import maze.obstacle.Switch;
 import maze.obstacle.Gate;
@@ -42,7 +43,7 @@ class Room extends AbstractScreen{
 	public var playerLightOffset = new Vec2();
 	public var playerLightFlickerTimer = FLICKER_TIME;
 
-	private var obstacles:Bsp<AbstractObstacle>;
+	public var obstacles:Bsp<AbstractObstacle>;
 
 	private var lvl = ResourceBuilder.buildMap("assets/level/01.tmj");
 
@@ -153,6 +154,13 @@ class Room extends AbstractScreen{
 						cast odit.next(), // rw
 						cast odit.next()); // rh
 					obstacles.add(cr, cr.aabb);
+				case ObjectIds.LADDER:
+					var l = new Ladder(this,
+						cast odit.next(), // x
+						cast odit.next(), // y
+						cast odit.next(), // w
+						cast odit.next()); // h
+					obstacles.add(l, l.aabb);
 				default:
 					throw "Unknown obstacle type: " + ot;
 			}
@@ -267,6 +275,7 @@ class Room extends AbstractScreen{
 	public function saveCheckpoint(x:Float, y:Float) {
 		CHECKPOINT = new Vec2(x, y);
 		Browser.getLocalStorage()?.setItem("lcann.bcm.chkpt", x + "," + y);
+		luck = 100;
 	}
 
 	public static function loadCheckpoint():Vec2{

@@ -83,7 +83,7 @@ class Player extends AbstractEntity {
 	}
 
 
-	public function drawShadow(c:CanvasRenderingContext2D, lx:Float, ly:Float, lr:Float) {
+	override public function drawShadow(c:CanvasRenderingContext2D, lx:Float, ly:Float, lr:Float) {
 		var ldir = Math.atan2(y - ly, x - lx);
 
 		var ax = x + Math.cos(ldir + Math.PI * 0.5) * -5;
@@ -107,5 +107,6 @@ class Player extends AbstractEntity {
 		c.quadraticCurveTo(cpx, cpy, ax + Math.cos(da) * d, ay + Math.sin(da) * d);
 		c.lineTo(ax, ay);
 		c.fill();
+		c.filter = "";
 	}
 }

@@ -15,6 +15,7 @@ class Switch extends Wall {
 		super(room, x, y);
 		iBox = new AABB(x - Room.CELL_SIZE / 2, y - Room.CELL_SIZE / 2, Room.CELL_SIZE * 2, Room.CELL_SIZE * 2);
 		i = Resources.images.get(Resources.SWITCH);
+		visible = false;
 	}
 
 	override function update(s:Float) {
@@ -33,9 +34,5 @@ class Switch extends Wall {
 	override function draw(c:CanvasRenderingContext2D):CanvasRenderingContext2D->Void {
 		c.drawImage(i, aabb.x, aabb.y);
 		return null;
-	}
-
-	override function drawShadow(c:CanvasRenderingContext2D, lx:Float, ly:Float, d:Float) {
-		// no shadow
 	}
 }

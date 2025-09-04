@@ -26,7 +26,7 @@ class Wall extends AbstractEntity{
 		return null;
 	}
 
-	public function drawShadow(c:CanvasRenderingContext2D, lx:Float, ly:Float, d:Float) {
+	override public function drawShadow(c:CanvasRenderingContext2D, lx:Float, ly:Float, d:Float) {
 		if(alive && visible){
 			eachLine((ax,ay,bx,by) -> {
 				var da:Float = Math.atan2(ay - ly, ax - lx);

@@ -55,8 +55,14 @@ class Light extends AbstractEntity{
 			w.drawShadow(shadowCtx, x, y, offset.x);
 		});
 
-		if(castPlayer && aabb.overlaps(room.player.aabb)){
-			room.player.drawShadow(shadowCtx, x, y, offset.x);
+		if(castPlayer){
+			room.obstacles.forEachIn(aabb, o->{
+				o.drawShadow(shadowCtx, x, y, offset.x);
+			});
+
+			if(aabb.overlaps(room.player.aabb)){
+				room.player.drawShadow(shadowCtx, x, y, offset.x);
+			}
 		}
 
 		dirty = false;

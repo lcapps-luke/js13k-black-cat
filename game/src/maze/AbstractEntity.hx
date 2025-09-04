@@ -19,6 +19,9 @@ abstract class AbstractEntity {
 
 	abstract public function update(s:Float):Void;
 	abstract public function draw(c:CanvasRenderingContext2D):CanvasRenderingContext2D->Void;
+	public function drawShadow(c:CanvasRenderingContext2D, lx:Float, ly:Float, lr:Float){
+		// Override if you want to cast a shadow
+	}
 
 	function set_x(value:Float):Float {
 		aabb.x = value - offset.x;

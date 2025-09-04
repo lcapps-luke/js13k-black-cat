@@ -123,6 +123,10 @@ class ResourceBuilder {
 					makeGate(o, obj.obstacles, mapData);
 				case "Cat":
 					makeCat(o, obj.obstacles, mapData);
+				case "Ladder":
+					makeLadder(o, obj.obstacles);
+				case "Mirror":
+					makeMirror(o, obj.obstacles);
 			}
 		}
 
@@ -232,6 +236,22 @@ class ResourceBuilder {
 		arr.push(regionObj.y * SCALE);
 		arr.push(regionObj.width * SCALE);
 		arr.push(regionObj.height * SCALE);
+	}
+
+	private static function makeLadder(o:TiledObject, arr:Array<Dynamic>):Void{
+		arr.push(ObjectIds.LADDER);
+		arr.push(o.x * SCALE);
+		arr.push(o.y * SCALE);
+		arr.push(o.width * SCALE);
+		arr.push(o.height * SCALE);
+	}
+
+	private static function makeMirror(o:TiledObject, arr:Array<Dynamic>):Void{
+		arr.push(ObjectIds.MIRROR);
+		arr.push(o.x * SCALE);
+		arr.push(o.y * SCALE);
+		arr.push(o.width * SCALE);
+		arr.push(o.height * SCALE);
 	}
 
 	#end

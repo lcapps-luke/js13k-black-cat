@@ -670,7 +670,7 @@
                 }, 
                 {
                  "ellipse":true,
-                 "height":768,
+                 "height":544,
                  "id":58,
                  "name":"",
                  "properties":[
@@ -688,9 +688,9 @@
                  "rotation":0,
                  "type":"Light",
                  "visible":true,
-                 "width":768,
-                 "x":624,
-                 "y":2432
+                 "width":544,
+                 "x":736,
+                 "y":2544
                 }, 
                 {
                  "ellipse":true,
@@ -715,10 +715,34 @@
                  "width":320,
                  "x":1856,
                  "y":2656
+                }, 
+                {
+                 "ellipse":true,
+                 "height":384,
+                 "id":61,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"colour",
+                         "type":"color",
+                         "value":"#ffffff00"
+                        }, 
+                        {
+                         "name":"direction",
+                         "propertytype":"Direction",
+                         "type":"string",
+                         "value":"LEFT"
+                        }],
+                 "rotation":0,
+                 "type":"Light",
+                 "visible":true,
+                 "width":384,
+                 "x":1728,
+                 "y":320
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -948,6 +972,90 @@
                  "width":32,
                  "x":1312,
                  "y":2432
+                }, 
+                {
+                 "height":32,
+                 "id":60,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Ladder",
+                 "visible":true,
+                 "width":96,
+                 "x":1824,
+                 "y":400
+                }, 
+                {
+                 "height":32,
+                 "id":62,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Crack",
+                 "visible":true,
+                 "width":64,
+                 "x":1408,
+                 "y":1152
+                }, 
+                {
+                 "height":32,
+                 "id":63,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Crack",
+                 "visible":true,
+                 "width":64,
+                 "x":1824,
+                 "y":992
+                }, 
+                {
+                 "height":64,
+                 "id":64,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Crack",
+                 "visible":true,
+                 "width":32,
+                 "x":1696,
+                 "y":1216
+                }, 
+                {
+                 "height":32,
+                 "id":65,
+                 "name":"",
+                 "rotation":0,
+                 "type":"Crack",
+                 "visible":true,
+                 "width":64,
+                 "x":1696,
+                 "y":1472
+                }, 
+                {
+                 "height":224,
+                 "id":66,
+                 "name":"",
+                 "rotation":0,
+                 "type":"CatRegion",
+                 "visible":true,
+                 "width":512,
+                 "x":864,
+                 "y":1888
+                }, 
+                {
+                 "height":0,
+                 "id":67,
+                 "name":"",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"region",
+                         "type":"object",
+                         "value":66
+                        }],
+                 "rotation":0,
+                 "type":"Cat",
+                 "visible":true,
+                 "width":0,
+                 "x":1120,
+                 "y":2064
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -956,7 +1064,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":60,
+ "nextobjectid":68,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

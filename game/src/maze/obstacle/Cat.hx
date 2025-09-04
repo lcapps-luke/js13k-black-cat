@@ -99,11 +99,5 @@ class Cat extends AbstractEntity{
 		c.drawImage(i, 0, 0);
 		c.restore();
 		return null;
-
-		/*
-		c.fillStyle = "#0F0";
-		c.fillRect(aabb.x, aabb.y, aabb.w, aabb.h);
-		return null;
-		*/
 	}
 }
