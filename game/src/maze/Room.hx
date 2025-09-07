@@ -1,10 +1,12 @@
 package maze;
 
+import js.html.eme.MediaKeyError;
 import maze.obstacle.Ladder;
 import maze.obstacle.CatRegion;
 import maze.obstacle.Switch;
 import maze.obstacle.Gate;
 import maze.obstacle.Checkpoint;
+import maze.obstacle.Mirror;
 import resource.ObjectIds;
 import js.html.CanvasPattern;
 import resource.Resources;
@@ -161,6 +163,14 @@ class Room extends AbstractScreen{
 						cast odit.next(), // w
 						cast odit.next()); // h
 					obstacles.add(l, l.aabb);
+				case ObjectIds.MIRROR:
+					var m = new Mirror(this,
+						cast odit.next(), // x
+						cast odit.next(), // y
+						cast odit.next(), // w
+						cast odit.next(), // h
+						cast odit.next());// dir
+					walls.add(m, m.aabb);
 				default:
 					throw "Unknown obstacle type: " + ot;
 			}

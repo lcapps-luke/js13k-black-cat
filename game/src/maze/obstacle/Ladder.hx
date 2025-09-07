@@ -27,7 +27,6 @@ class Ladder extends AbstractObstacle {
 		for(i in 1...rungCount){
 			var pos = i * RUNG_SPACING;
 			var z = MAX_HEIGHT;//(1 - pos / (vrt ? h : w)) * MAX_HEIGHT;
-			trace(z);
 			lines.push([
 				[vrt ? 0 : pos, vrt ? pos : 0, z],
 				[vrt ? w : pos, vrt ? pos : h, z]

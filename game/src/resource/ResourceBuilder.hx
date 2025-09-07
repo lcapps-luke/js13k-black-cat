@@ -77,6 +77,36 @@ class ResourceBuilder {
 
 	#if macro
 	private static function loadWalls(l:TiledLayer):String{
+		/*
+		var mp = new Array<String>();
+
+		var last = "";
+		var qty = 0;
+		for(id in l.data){
+			var c = switch(id){
+				case 0: "f";
+				case 1: "w";
+				default: "z";
+			}
+
+			if(c == last){
+				qty++;
+			}else{
+				if(last != ""){
+					if(qty > 2){
+						mp.push(Std.string(qty));
+					}
+					mp.push(last);
+				}
+				last = c;
+				qty = 1;
+			}
+		}
+
+
+		return mp.join("");
+		*/
+
 		return l.data.map(id -> {
 			return switch(id){
 				case 0: "f";
@@ -247,11 +277,21 @@ class ResourceBuilder {
 	}
 
 	private static function makeMirror(o:TiledObject, arr:Array<Dynamic>):Void{
+		var dir = getProperty(o.properties, "direction");
+		var directionVal = switch(dir){
+			case "UP": "n";
+			case "DOWN": "s";
+			case "LEFT": "w";
+			case "RIGHT": "e";
+			default: throw 'Unknown direction value: $dir';
+		};
+
 		arr.push(ObjectIds.MIRROR);
 		arr.push(o.x * SCALE);
 		arr.push(o.y * SCALE);
 		arr.push(o.width * SCALE);
 		arr.push(o.height * SCALE);
+		arr.push(directionVal);
 	}
 
 	#end

@@ -134,6 +134,24 @@
             ]
         },
         {
+            "color": "#ffaaaa00",
+            "drawFill": true,
+            "id": 15,
+            "members": [
+                {
+                    "name": "direction",
+                    "propertyType": "Direction",
+                    "type": "string",
+                    "value": "UP"
+                }
+            ],
+            "name": "Mirror",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
             "color": "#ff0000ff",
             "drawFill": true,
             "id": 5,
@@ -146,12 +164,12 @@
             ]
         },
         {
-            "color": "#ffffaa00",
+            "color": "#ff00007f",
             "drawFill": true,
-            "id": 7,
+            "id": 14,
             "members": [
             ],
-            "name": "Switch",
+            "name": "SpawnPoint",
             "type": "class",
             "useAs": [
                 "property",
@@ -159,12 +177,12 @@
             ]
         },
         {
-            "color": "#ff00007f",
+            "color": "#ffffaa00",
             "drawFill": true,
-            "id": 14,
+            "id": 7,
             "members": [
             ],
-            "name": "SpawnPoint",
+            "name": "Switch",
             "type": "class",
             "useAs": [
                 "property",

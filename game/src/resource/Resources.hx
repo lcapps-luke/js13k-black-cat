@@ -7,12 +7,14 @@ import js.lib.Promise;
 
 @:native("Res")
 class Resources {
+	
 	public static inline var CRACK = "c";
 	public static inline var PLAYER = "p";
 	public static inline var PLANTER = "l";
 	public static inline var BRANCHES = "b";
 	public static inline var SWITCH = "s";
 	public static inline var CAT = "a";
+	public static inline var MIRROR = "m";
 
 	@:native("rq")
 	public static var resourceQty:Int = 0;
@@ -34,7 +36,8 @@ class Resources {
 			() -> loadImage(PLANTER, ResourceBuilder.buildImage("planter.svg")),
 			() -> loadImage(BRANCHES, ResourceBuilder.buildImage("branches.svg")),
 			() -> loadImage(SWITCH, ResourceBuilder.buildImage("switch.svg")),
-			() -> loadImage(CAT, ResourceBuilder.buildImage("cat.svg"))
+			() -> loadImage(CAT, ResourceBuilder.buildImage("cat.svg")),
+			() -> loadImage(MIRROR, ResourceBuilder.buildImage("mirror.svg"))
 		];
 
 		resourceQty = loaders.length;
