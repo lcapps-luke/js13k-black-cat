@@ -16,6 +16,8 @@ class Checkpoint extends AbstractObstacle {
 	private var ia:ImageElement;
 	private var ib:ImageElement;
 
+	private var knockDelay:Float = 0;
+
 	public function new(room:Room, x:Float, y:Float, spawnX:Float, spawnY:Float) {
 		super(room);
 		aabb.w = 48;
@@ -37,8 +39,18 @@ class Checkpoint extends AbstractObstacle {
 
 			if(Ctrl.actionPress){
 				room.saveCheckpoint(spawnX, spawnY);
+				Sound.knock();
+				knockDelay = 0.4;
 			}
 		}
+
+		if(knockDelay > 0){
+			knockDelay -= s;
+			if(knockDelay < 0){
+				Sound.knock();
+			}
+		}
+		
 	}
 
 	public function draw(c:CanvasRenderingContext2D) {

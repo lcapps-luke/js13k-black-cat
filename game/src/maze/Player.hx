@@ -19,6 +19,8 @@ class Player extends AbstractEntity {
 	private var sa:Vec2 = new Vec2();
 	private var sb:Vec2 = new Vec2();
 
+	private var stepTimer:Float = 0;
+
 	public function new(room:Room) {
 		super(room);
 		aabb.w = 13;
@@ -70,6 +72,14 @@ class Player extends AbstractEntity {
 
 		x += mx;
 		y += my;
+
+		if(mx != 0 || my != 0){
+			stepTimer -= s;
+			if(stepTimer < 0){
+				stepTimer = 0.3;
+				Sound.step();
+			}
+		}
 	}
 
 	public function draw(c:CanvasRenderingContext2D):CanvasRenderingContext2D->Void {

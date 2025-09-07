@@ -23,6 +23,7 @@ class CrackObstacle extends AbstractObstacle {
 		if(!over && playerOverlaps){
 			over = true;
 			room.hurt(10);
+			Sound.crack();
 		}
 
 		over = playerOverlaps;

@@ -1,5 +1,6 @@
 package maze.obstacle;
 
+import math.Random;
 import resource.Resources;
 import js.html.ImageElement;
 import math.Vec2;
@@ -16,6 +17,10 @@ class Cat extends AbstractEntity{
 
 	private var i:ImageElement;
 	private var a:Float = 0;
+	private var frq:Float = 0;
+
+	private var mewTimer = 0.0;
+	private var mewCooldown = 0.0;
 
 	public function new(room:Room, x:Float, y:Float, region:CatRegion) {
 		super(room);
@@ -27,6 +32,7 @@ class Cat extends AbstractEntity{
 		this.region = region;
 
 		i = Resources.images.get(Resources.CAT);
+		frq = 74 + Math.random() * 316;
 	}
 
 	public function update(s:Float) {
@@ -49,7 +55,26 @@ class Cat extends AbstractEntity{
 		// move
 		x += md.x * MOVE_SPEED * Math.min(s, 0.16);
 		y += md.y * MOVE_SPEED * Math.min(s, 0.16);
+
+		mewTimer -= s;
+		mewCooldown -= s;
+		if(mewTimer < 0){
+			mew();
+			mewTimer = 2 + Math.random() * 10;
+		}
 	}
+
+	public function mew() {
+		if(mewCooldown <= 0){
+			mewCooldown = 1.5;
+
+			var dx = room.player.x - x;
+			var dy = room.player.y - y;
+			var d = Math.sqrt(dx * dx + dy * dy);
+			Sound.mew(frq, 1 - Math.min(d / Main.WIDTH, 1));
+		}
+	}
+	
 
 	private function isBlocked(dx:Float, dy:Float){
 		cr.x = x + (dx * LOOK_AHEAD) - cr.w / 2;

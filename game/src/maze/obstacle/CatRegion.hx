@@ -27,6 +27,7 @@ class CatRegion extends AbstractObstacle{
 			var d = Math.sqrt(dx * dx + dy * dy);
 			if(d < RANGE){
 				room.hurt(DPS * s);
+				cat.mew();
 			}
 		}
 	}

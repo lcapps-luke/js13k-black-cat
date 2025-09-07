@@ -27,6 +27,7 @@ class Switch extends Wall {
 				for(w in walls){
 					w.alive = !w.alive;
 				}
+				Sound.click();
 			}
 		}
 	}
