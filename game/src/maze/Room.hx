@@ -182,8 +182,8 @@ class Room extends AbstractScreen{
 		if(!gameOver){
 			player.update(s);
 		}
-		camera.x = Math.max(0, player.x - camera.w / 2);
-		camera.y = Math.max(0, player.y - camera.h / 2);
+		camera.x = Math.min(Math.max(0, player.x - camera.w / 2), mapWidth - camera.w);
+		camera.y = Math.min(Math.max(0, player.y - camera.h / 2), mapHeight - camera.h);
 
 		Main.context.save();
 		Main.context.translate(-camera.x, -camera.y);
@@ -267,8 +267,10 @@ class Room extends AbstractScreen{
 			luck -= qty;
 			return false;
 		}
-		gameOver = true;
-		gameOverScreen = new GameOverScreen();
+		if(!gameOver){
+			gameOver = true;
+			gameOverScreen = new GameOverScreen();
+		}
 		return true;
 	}
 
