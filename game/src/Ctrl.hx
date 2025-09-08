@@ -30,8 +30,12 @@ class Ctrl {
 	public static var right(default, null):Bool = false;
 	@:native("u")
 	public static var up(default, null):Bool = false;
+	@:native("up")
+	public static var upPress(default, null):Bool = false;
 	@:native("d")
 	public static var down(default, null):Bool = false;
+	@:native("dp")
+	public static var downPress(default, null):Bool = false;
 
 	@:native("a")
 	public static var action(default, null):Bool = false;
@@ -164,12 +168,18 @@ class Ctrl {
 	public static function update() {
 		left = checkKeys(["ArrowLeft", "KeyA"]) || checkButtons([14], [0, 2], f -> f < -0.3) || checkOnScreenButton(ON_SCREEN_LEFT);
 		right = checkKeys(["ArrowRight", "KeyD"]) || checkButtons([15], [0, 2], f -> f > 0.3) || checkOnScreenButton(ON_SCREEN_RIGHT);
+
+		var old = up;
 		up = checkKeys(["ArrowUp", "KeyW"]) || checkButtons([12], [1, 3], f -> f < -0.3) || checkOnScreenButton(ON_SCREEN_UP);
+		upPress = (!old && up);
+
+		old = down;
 		down = checkKeys(["ArrowDown", "KeyS"]) || checkButtons([13], [1, 3], f -> f > 0.3) || checkOnScreenButton(ON_SCREEN_DOWN);
+		downPress = (!old && down);
 		
-		var oldAction = action;
-		action = checkKeys(["Space", "Enter"]) || checkButtons([0, 1, 2, 3], []) || checkOnScreenButton(ON_SCREEN_ACTION);
-		actionPress = (!oldAction && action);
+		old = action;
+		action = checkKeys(["Space", "Enter", "KeyE"]) || checkButtons([0, 1, 2, 3], []) || checkOnScreenButton(ON_SCREEN_ACTION);
+		actionPress = (!old && action);
 	}
 
 	@:native("ck")

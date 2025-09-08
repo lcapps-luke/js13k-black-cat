@@ -51,7 +51,7 @@ class Room extends AbstractScreen{
 
 	public var luck:Float = 100;
 	private var gameOver:Bool = false;
-	private var gameOverScreen:GameOverScreen;
+	private var gameOverScreen:AbstractScreen;
 
 	private var bgPattern:CanvasPattern;
 	public var interactionHint:String = "test";
@@ -172,7 +172,6 @@ class Room extends AbstractScreen{
 						cast odit.next());// dir
 					walls.add(m, m.aabb);
 				default:
-					throw "Unknown obstacle type: " + ot;
 			}
 		}
 	}
@@ -181,6 +180,10 @@ class Room extends AbstractScreen{
 		super.update(s);
 		if(!gameOver){
 			player.update(s);
+			if(player.aabb.x > mapWidth){
+				gameOver = true;
+				gameOverScreen = new GameCompleteScreen();
+			}
 		}
 		camera.x = Math.min(Math.max(0, player.x - camera.w / 2), mapWidth - camera.w);
 		camera.y = Math.min(Math.max(0, player.y - camera.h / 2), mapHeight - camera.h);
@@ -252,7 +255,6 @@ class Room extends AbstractScreen{
 		Main.context.fillStyle = "#208";
 		Main.context.fillRect(Main.WIDTH / 2 - LUCK_BAR_WIDTH / 2, 10, LUCK_BAR_WIDTH * luck / 100, LUCK_BAR_HEIGHT);
 		Main.context.fillStyle = "#fff";
-		Main.context.font = "bold 10px sans-serif";
 		(cast Main.context).letterSpacing = "3px";
 		Main.context.centeredText("Luck", Main.WIDTH / 2 - LUCK_BAR_WIDTH / 2, LUCK_BAR_WIDTH, 10 + LUCK_BAR_HEIGHT * 0.8, true);
 
@@ -270,6 +272,7 @@ class Room extends AbstractScreen{
 		if(!gameOver){
 			gameOver = true;
 			gameOverScreen = new GameOverScreen();
+			Sound.die();
 		}
 		return true;
 	}
@@ -286,13 +289,13 @@ class Room extends AbstractScreen{
 
 	public function saveCheckpoint(x:Float, y:Float) {
 		CHECKPOINT = new Vec2(x, y);
-		Browser.getLocalStorage()?.setItem("lcann.bcm.chkpt", x + "," + y);
+		Browser.getLocalStorage()?.setItem(Main.SAVE, x + "," + y);
 		luck = 100;
 	}
 
 	public static function loadCheckpoint():Vec2{
-		var data = Browser.getLocalStorage()?.getItem("lcann.bcm.chkpt");
-		if(data != null){
+		var data = Browser.getLocalStorage()?.getItem(Main.SAVE);
+		if(data != null && data != ""){
 			var pos = data.split(",");
 			return new Vec2(Std.parseFloat(pos[0]), Std.parseFloat(pos[1]));
 		}

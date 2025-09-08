@@ -1,8 +1,6 @@
-package maze;
-
 using ui.ContextUtils;
 
-class GameOverScreen extends AbstractScreen{
+class GameCompleteScreen extends AbstractScreen{
 	private static inline var BG_ALPHA = 0.7;
 	private static inline var FADE_TIME = 1;
 
@@ -24,16 +22,17 @@ class GameOverScreen extends AbstractScreen{
 			fgAlpha += FADE_TIME * s;
 		}else{
 			if(Ctrl.action){
-				Main.currentScreen = new Room();
+				Main.currentScreen = new MainMenuScreen();
 				Sound.select();
 			}
 		}
 
 		Main.context.fillStyle = "#FFF";
 		Main.context.font = "20px monospace";
-		Main.context.centeredText("Your luck ran out", 0, Main.WIDTH, Main.HEIGHT * 0.25);
+		Main.context.centeredText("You escaped", 0, Main.WIDTH, Main.HEIGHT * 0.25);
+		Main.context.centeredText("the maze!", 0, Main.WIDTH, Main.HEIGHT * 0.25 + 20);
 		Main.context.font = "10px monospace";
-		Main.context.centeredText("Press any key to retry", 0, Main.WIDTH, Main.HEIGHT * 0.5);
+		Main.context.centeredText("Press any key to re-start", 0, Main.WIDTH, Main.HEIGHT * 0.5);
 
 		Main.context.globalAlpha = 1;
 	}

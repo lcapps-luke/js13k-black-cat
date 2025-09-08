@@ -51,6 +51,7 @@ class Mirror extends Wall{
 			if(Ctrl.actionPress){
 				alive = false;
 				room.hurt(40);
+				Sound.smash();
 			}
 		}
 	}

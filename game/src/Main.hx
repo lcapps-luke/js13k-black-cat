@@ -9,7 +9,8 @@ import js.html.CanvasElement;
 class Main{
 	public static inline var WIDTH = 255;
 	public static inline var HEIGHT = 255;
-	public static var TITLE = "Black Cat";
+	public static var TITLE = "Black Cat Maze";
+	public static var SAVE = "lcann.bcm.chkpt";
 
 	@:native("ca")
 	public static var canvas(default, null):CanvasElement;

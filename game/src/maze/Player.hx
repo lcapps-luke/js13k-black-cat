@@ -76,7 +76,7 @@ class Player extends AbstractEntity {
 		if(mx != 0 || my != 0){
 			stepTimer -= s;
 			if(stepTimer < 0){
-				stepTimer = 0.3;
+				stepTimer = 0.35;
 				Sound.step();
 			}
 		}
