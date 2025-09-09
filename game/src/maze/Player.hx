@@ -119,4 +119,9 @@ class Player extends AbstractEntity {
 		c.fill();
 		c.filter = "";
 	}
+
+	public function fall() {
+		i = Resources.images.get(Resources.PLAYER_FALL);
+		offset.set(25, 19);
+	}
 }

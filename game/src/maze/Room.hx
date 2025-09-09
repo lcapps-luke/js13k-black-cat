@@ -57,6 +57,7 @@ class Room extends AbstractScreen{
 	public var interactionHint:String = "test";
 
 	private var deferredDraws = new List<CanvasRenderingContext2D->Void>();
+	public var decals:Bsp<Decal>;
 
 	public function new(){
 		super();
@@ -109,6 +110,7 @@ class Room extends AbstractScreen{
 		shadowCanvas = newCanvas();
 
 		bgPattern = Main.context.createPattern(Resources.backgroundTile, "repeat");
+		decals = new Bsp<Decal>(mapWidth, mapHeight, 10);
 	}
 	
 	private function loadObjects(od:Array<Dynamic>) {
@@ -194,6 +196,10 @@ class Room extends AbstractScreen{
 		Main.context.fillStyle = bgPattern;
 		Main.context.fillRect(camera.x, camera.y, camera.w, camera.h);
 
+		decals.forEachIn(camera, d->{
+			d.draw(Main.context);
+		});
+
 		obstacles.forEachIn(camera, o->{
 			o.update(s);
 			var dd = o.draw(Main.context);
@@ -273,6 +279,7 @@ class Room extends AbstractScreen{
 			gameOver = true;
 			gameOverScreen = new GameOverScreen();
 			Sound.die();
+			player.fall();
 		}
 		return true;
 	}

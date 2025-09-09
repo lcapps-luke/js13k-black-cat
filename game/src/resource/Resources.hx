@@ -15,6 +15,8 @@ class Resources {
 	public static inline var SWITCH = "s";
 	public static inline var CAT = "a";
 	public static inline var MIRROR = "m";
+	public static inline var PLAYER_FALL = "f";
+	public static inline var MIRROR_SMASH = "i";
 
 	@:native("rq")
 	public static var resourceQty:Int = 0;
@@ -37,7 +39,9 @@ class Resources {
 			() -> loadImage(BRANCHES, ResourceBuilder.buildImage("branches.svg")),
 			() -> loadImage(SWITCH, ResourceBuilder.buildImage("switch.svg")),
 			() -> loadImage(CAT, ResourceBuilder.buildImage("cat.svg")),
-			() -> loadImage(MIRROR, ResourceBuilder.buildImage("mirror.svg"))
+			() -> loadImage(MIRROR, ResourceBuilder.buildImage("mirror.svg")),
+			() -> loadImage(PLAYER_FALL, ResourceBuilder.buildImage("player_fall.svg")),
+			() -> loadImage(MIRROR_SMASH, ResourceBuilder.buildImage("mirror_smash.svg"))
 		];
 
 		resourceQty = loaders.length;

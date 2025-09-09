@@ -1,5 +1,6 @@
 package maze.obstacle;
 
+import haxe.Resource;
 import math.AABB;
 import resource.Resources;
 import js.html.ImageElement;
@@ -52,6 +53,9 @@ class Mirror extends Wall{
 				alive = false;
 				room.hurt(40);
 				Sound.smash();
+
+				var d = new Decal(room, x, y, aabb.w, aabb.h, Resources.images.get(Resources.MIRROR_SMASH), a);
+				room.decals.add(d, d.aabb);
 			}
 		}
 	}
