@@ -1,6 +1,5 @@
 package maze.obstacle;
 
-import math.Random;
 import resource.Resources;
 import js.html.ImageElement;
 import math.Vec2;

@@ -20,6 +20,8 @@ class Player extends AbstractEntity {
 	private var sb:Vec2 = new Vec2();
 
 	private var stepTimer:Float = 0;
+	private var stepAngle:Float = 0;
+	private var alive = true;
 
 	public function new(room:Room) {
 		super(room);
@@ -79,6 +81,10 @@ class Player extends AbstractEntity {
 				stepTimer = 0.35;
 				Sound.step();
 			}
+
+			stepAngle += Math.PI * 3 * s;
+		}else{
+			stepAngle = 0;
 		}
 	}
 
@@ -86,6 +92,15 @@ class Player extends AbstractEntity {
 		c.save();
 		c.translate(x, y);
 		c.rotate(a);
+
+		if(alive){
+			c.fillStyle = "#11260B";
+			c.beginPath();
+			c.circle(Math.sin(stepAngle) * -4, -3, 4);
+			c.circle(Math.sin(stepAngle) * 4, 3, 4);
+			c.fill();
+		}
+		
 		c.translate(-i.naturalWidth / 2, -i.naturalHeight / 2);
 		c.drawImage(i, 0, 0);
 		c.restore();
@@ -123,5 +138,6 @@ class Player extends AbstractEntity {
 	public function fall() {
 		i = Resources.images.get(Resources.PLAYER_FALL);
 		offset.set(25, 19);
+		alive = false;
 	}
 }
